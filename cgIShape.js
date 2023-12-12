@@ -210,6 +210,43 @@ function makeSphere(slices, stacks) {
     }
 }
 
+function makeStar(numPoints) {
+    let innerRadius = 0.2;
+    let outerRadius = 0.5;
+    let angleStep = radians(360 / (numPoints*2));
+    for (let i = 0; i < numPoints * 2; i+=2) {
+        let angle = angleStep * i;
+        
+        let outZ = 0.1;
+        const centerZ = 0;
+
+
+        const centerX = 0;
+        let starPointX = outerRadius * Math.cos(angle);
+        let rightCornerX = innerRadius * Math.cos(angle + angleStep);
+        let leftCornerX = innerRadius * Math.cos(angle - angleStep);
+
+        const centerY = 0;
+        let starPointY = outerRadius * Math.sin(angle);
+        let rightCornerY = innerRadius * Math.sin(angle + angleStep);
+        let leftCornerY = innerRadius * Math.sin(angle - angleStep);
+
+        // front right half of point (triangles drawn counter-clockwise)
+        addTriangle(centerX, centerY, outZ, rightCornerX, rightCornerY, centerZ, starPointX, starPointY, centerZ);
+        // front left half of point
+        addTriangle(centerX, centerY, outZ, starPointX, starPointY, centerZ, leftCornerX, leftCornerY, centerZ);
+        
+        outZ = -outZ;
+        // back right half of point (triangles drawn counter-clockwise)
+        addTriangle(centerX, centerY, outZ, starPointX, starPointY, centerZ, rightCornerX, rightCornerY, centerZ);
+        // back left half of point
+        addTriangle(centerX, centerY, outZ, leftCornerX, leftCornerY, centerZ, starPointX, starPointY, centerZ);
+        
+
+        
+    }
+}
+
 
 ////////////////////////////////////////////////////////////////////
 //

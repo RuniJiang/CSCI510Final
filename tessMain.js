@@ -27,6 +27,7 @@
   var CYLINDER = 2;
   var CONE = 3;
   var SPHERE = 4;
+  var STAR = 5;
   var curShape = CUBE;
 
   // Given an id, extract the content's of a shader script
@@ -95,10 +96,17 @@
       bary = [];
       
       // make your shape based on type
-      if (curShape == CUBE) makeCube (division1);
+      if (curShape == CUBE)
+      {
+        makeCube (division1);
+        //load identity matrix
+        // matrix tranform
+        // 
+      }
       else if (curShape == CYLINDER) makeCylinder ( division1, division2);
       else if (curShape == CONE) makeCone ( division1, division2);
       else if (curShape == SPHERE) makeSphere ( division1, division2);
+      else if (curShape == STAR) makeStar ( division1 );
       else
           console.error(`Bad object type`);
           
