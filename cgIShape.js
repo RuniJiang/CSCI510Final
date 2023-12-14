@@ -210,13 +210,14 @@ function makeSphere(slices, stacks) {
     }
 }
 
+// creates a 1 x 1 star with a set amount of points
 function makeStar(numPoints) {
     let innerRadius = 0.2;
     let outerRadius = 0.5;
-    let angleStep = radians(360 / (numPoints*2));
-    for (let i = 0; i < numPoints * 2; i+=2) {
+    let angleStep = radians(360 / (numPoints * 2));
+    for (let i = 0; i < numPoints * 2; i += 2) {
         let angle = angleStep * i;
-        
+
         let outZ = 0.1;
         const centerZ = 0;
 
@@ -235,15 +236,94 @@ function makeStar(numPoints) {
         addTriangle(centerX, centerY, outZ, rightCornerX, rightCornerY, centerZ, starPointX, starPointY, centerZ);
         // front left half of point
         addTriangle(centerX, centerY, outZ, starPointX, starPointY, centerZ, leftCornerX, leftCornerY, centerZ);
-        
+
         outZ = -outZ;
         // back right half of point (triangles drawn counter-clockwise)
         addTriangle(centerX, centerY, outZ, starPointX, starPointY, centerZ, rightCornerX, rightCornerY, centerZ);
         // back left half of point
         addTriangle(centerX, centerY, outZ, leftCornerX, leftCornerY, centerZ, starPointX, starPointY, centerZ);
-        
 
-        
+
+
+    }
+}
+
+// creates an arch that is 1 x .5
+function makeArch(radialdivision, archdivision) {
+    let radius = 0.05;  // radius of 0.5 = diameter 1
+    let height = .5;  // height of 1.0
+
+    let angleStep = radians(360 / radialdivision);
+    let archRadius = .25;
+    let archStep = radians(180 / archdivision);
+
+    for (let i = 0; i < radialdivision; i++) {
+        let angle1 = i * angleStep;
+        let angle2 = (i + 1) * angleStep;
+
+
+        let offset = -archRadius;
+
+        let x1 = radius * Math.cos(angle1) + offset;
+        let x2 = radius * Math.cos(angle2) + offset;
+
+        let z1 = radius * Math.sin(angle1);
+        let z2 = radius * Math.sin(angle2);
+
+        let y1 = -height;
+        let y2 = height;
+
+        x1 = radius * Math.cos(angle1) + offset;
+        x2 = radius * Math.cos(angle2) + offset;
+
+        //Bottom Circle of straight left beam
+        addTriangle(offset, -height, 0, x2, -height, z2, x1, -height, z1);
+        //Vertical Triangles left beam
+        addTriangle(x1, y1, z1, x2, y1, z2, x1, y2, z1);
+        addTriangle(x1, y2, z1, x2, y1, z2, x2, y2, z2);
+
+        y1 = 0;
+        y2 = 0;
+
+        for (let j = 0; j < archdivision; j++) {
+            /*
+            ROTATION AROUND Z-AXIS:
+            x' = x * cos(angle) + y * sin(angle);
+            y' = x * -sin(angle) + y *  cos(angle);
+            z' = z;
+            */
+
+            //NOTE Y MUST START AT 0 FOR ARCH IN ORDER TO ROTATE PROPERLY. TRANSLATE AFTER ROTATE
+            //addTriangle(offset, y1, 0, x2, y1, z2, x1, y1, z1);
+            rotationAngle = archStep * j;
+
+            //xs rotate for of triangles (rotated circle)
+            x1p = x1 * Math.cos(rotationAngle); //can drop + y * -sin(angle) because y = 0
+            x2p = x2 * Math.cos(rotationAngle);
+            x3 = x1 * Math.cos(rotationAngle + archStep);
+            x4 = x2 * Math.cos(rotationAngle + archStep);
+
+            //ys for top of triangles (rotated circle around z axis)
+            y1 = x1 * -Math.sin(rotationAngle) + height; //can drop + y * cos(angle) because y = 0
+            y2 = x2 * -Math.sin(rotationAngle) + height;
+            y3 = x1 * -Math.sin(rotationAngle + archStep) + height;
+            y4 = x2 * -Math.sin(rotationAngle + archStep) + height;
+
+            //now rotate complete object and translate
+
+            addTriangle(x1p, y1, z1, x2p, y2, z2, x3, y3, z1);
+            addTriangle(x3, y3, z1, x2p, y2, z2, x4, y4, z2);
+
+        }
+
+        offset = -offset
+        y1 = -height;
+        y2 = height;
+        //Bottom Circle of straight right beam
+        addTriangle(offset, -height, 0, x3, -height, z1, x4, -height, z2);
+        //Vertical Triangles right beam
+        addTriangle(x4, y1, z2, x3, y1, z1, x3, y2, z1);
+        addTriangle(x4, y1, z2, x3, y2, z1, x4, y2, z2);
     }
 }
 
