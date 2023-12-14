@@ -261,7 +261,6 @@ function makeArch(radialdivision, archdivision) {
         let angle1 = i * angleStep;
         let angle2 = (i + 1) * angleStep;
 
-
         let offset = -archRadius;
 
         let x1 = radius * Math.cos(angle1) + offset;
