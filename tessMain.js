@@ -6,7 +6,9 @@ let gl,
   program,
   points,
   bary,
-  indices;
+  indices,
+  projectionMatrix,
+  viewMatrix;
 
 // VAO stuff
 var myVAO = null;
@@ -156,6 +158,7 @@ function draw() {
   gl.bindVertexArray(myVAO);
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, myIndexBuffer);
 
+  
   // Draw to the scene using triangle primitives
   gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
 
@@ -194,6 +197,30 @@ function init() {
 
   // Read, compile, and link your shaders
   initProgram();
+
+  // Set up the projection matrix (example using perspective projection)
+  const fov = 45 * Math.PI / 180;
+  const aspect = gl.canvas.width / gl.canvas.height;
+  const zNear = 0.1;
+  const zFar = 100.0;
+  const projectionMatrix = mat4.create(); // Assuming you're using gl-matrix library
+  mat4.perspective(projectionMatrix, fov, aspect, zNear, zFar);
+
+  // Pass the projection matrix to the shader
+  const projectionMatrixLocation = gl.getUniformLocation(program, 'uProjectionMatrix');
+  gl.uniformMatrix4fv(projectionMatrixLocation, false, projectionMatrix);
+
+ // Set up the view matrix (position the camera)
+ const eye = [0.0, 0.0, 1.5];  // Camera position (adjust as needed)
+ const center = [0.0, 0.0, 0.0];  // Point the camera is looking at
+ const up = [0.0, 1.0, 0.0];  // Up direction of the camera
+
+ const viewMatrix = mat4.create();
+ mat4.lookAt(viewMatrix, eye, center, up);
+
+ const viewMatrixLocation = gl.getUniformLocation(program, 'uViewMatrix');
+ gl.uniformMatrix4fv(viewMatrixLocation, false, viewMatrix);
+
 
   // create and bind your current object
   createNewShape();

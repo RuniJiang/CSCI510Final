@@ -1,14 +1,17 @@
 <html>
 <head>
     <title>CSCI-510: Tessellation</title>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.4.0/gl-matrix.js"></script>
+
     <!-- vertex Shader -->
     <script id="vertex-shader" type="x-shader/x-vertex">
         #version 300 es
         in vec4 aVertexPosition;
         in vec3 bary;
         uniform vec3 theta;
-        
+        uniform mat4 uProjectionMatrix;
+        uniform mat4 uViewMatrix;
+
         out vec3 vbc;
 
         void main()
@@ -35,7 +38,10 @@
                              0.0,  0.0,  1.0,  0.0,
                              0.0,  0.0,  0.0,  1.0 );
 
-            gl_Position = rz * ry * rx * aVertexPosition;
+            mat4 modelMatrix = rz * ry * rx;
+            mat4 modelViewMatrix = uViewMatrix * modelMatrix;
+
+            gl_Position = uProjectionMatrix * modelViewMatrix * aVertexPosition;
             vbc = bary;
         }
     </script>
