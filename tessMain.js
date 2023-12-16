@@ -38,6 +38,12 @@ var STAR = 5;
 var ARCH = 6;
 var curShape = STAR;
 
+// Camera variables
+// Set up the view matrix (position the camera)
+let eye = [0.0, 0, 5.0];  // Camera position (adjust as needed)
+let center = [0.0, 0.0, 0.0];  // Point the camera is looking at
+let up = [0.0, 1.0, 0.0];  // Up direction of the camera
+
 // Given an id, extract the content's of a shader script
 // from the DOM and return the compiled shader
 function getShader(id) {
@@ -190,11 +196,6 @@ function init() {
   const projectionMatrixLocation = gl.getUniformLocation(program, 'uProjectionMatrix');
   gl.uniformMatrix4fv(projectionMatrixLocation, false, projectionMatrix);
 
-  // Set up the view matrix (position the camera)
-  const eye = [0.0, 0.0, 5.0];  // Camera position (adjust as needed)
-  const center = [0.0, 0.0, 0.0];  // Point the camera is looking at
-  const up = [0.0, 1.0, 0.0];  // Up direction of the camera
-
   const viewMatrix = mat4.create();
   mat4.lookAt(viewMatrix, eye, center, up);
 
@@ -203,7 +204,6 @@ function init() {
 
 
   // create and bind your current object
-
 
 
   createScene();

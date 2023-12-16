@@ -84,6 +84,9 @@
     <!-- include the main tesselation functions -->
     <script type="text/javascript" src="./tessMain.js"></script>
     
+    <!-- include the main tesselation functions -->
+    <script type="text/javascript" src="./camera.js"></script>
+    
     <!-- keyboard functions -->
     <script type="text/javascript">
     
@@ -117,13 +120,13 @@
         else if (key == '3' || key == 'n') {
             curShape = CONE;
         }
-        else if (key == '4' || key == 's') {
+        else if (key == '4') {
             curShape = SPHERE
         }
         else if (key == '5' || key == 't') {
             curShape = STAR
         }
-        else if (key == '6' || key == 'a') {
+        else if (key == '6') {
             curShape = ARCH
         }
 
@@ -151,6 +154,53 @@
             angles[1] = anglesReset[1];
             angles[2] = anglesReset[2];
         }
+
+        else if ( key == 'w') {
+            moveForward();
+        }
+
+        else if (key == 's') {
+            moveBackwards();
+        }
+
+        else if (key == 'd') {
+            moveRight();
+        }
+
+        else if (key == 'a') {
+            moveLeft();
+        }
+
+        else if (key == 'Shift') {
+            moveUp();
+        }
+
+        else if (key == 'Control') {
+            moveDown();
+        }
+
+        else if (key == 'ArrowUp') {
+            lookUp();
+        }
+
+        else if (key == 'ArrowDown') {
+            lookDown();
+        }
+
+        else if (key == 'ArrowLeft') {
+            lookLeft();
+        } 
+        
+        else if (key == 'ArrowRight') {
+            lookRight();
+        }
+
+        else if (key == ' ') {
+            console.log("turnAround");
+            turnAround();
+        }
+
+        console.log(key)
         
         // create a new shape and do a redo a draw
         createScene();
