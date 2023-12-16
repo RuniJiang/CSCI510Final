@@ -233,15 +233,15 @@ function makeStar(numPoints) {
         let leftCornerY = innerRadius * Math.sin(angle - angleStep);
 
         // front right half of point (triangles drawn counter-clockwise)
-        addTriangle(centerX, centerY, outZ, rightCornerX, rightCornerY, centerZ, starPointX, starPointY, centerZ);
+        addTriangle(rightCornerX, rightCornerY, centerZ, centerX, centerY, outZ, starPointX, starPointY, centerZ);
         // front left half of point
-        addTriangle(centerX, centerY, outZ, starPointX, starPointY, centerZ, leftCornerX, leftCornerY, centerZ);
+        addTriangle(starPointX, starPointY, centerZ, centerX, centerY, outZ, leftCornerX, leftCornerY, centerZ);
 
         outZ = -outZ;
         // back right half of point (triangles drawn counter-clockwise)
-        addTriangle(centerX, centerY, outZ, starPointX, starPointY, centerZ, rightCornerX, rightCornerY, centerZ);
+        addTriangle(starPointX, starPointY, centerZ, centerX, centerY, outZ, rightCornerX, rightCornerY, centerZ);
         // back left half of point
-        addTriangle(centerX, centerY, outZ, leftCornerX, leftCornerY, centerZ, starPointX, starPointY, centerZ);
+        addTriangle(leftCornerX, leftCornerY, centerZ, centerX, centerY, outZ, starPointX, starPointY, centerZ);
 
 
 
@@ -276,10 +276,10 @@ function makeArch(radialdivision, archdivision) {
         x2 = radius * Math.cos(angle2) + offset;
 
         //Bottom Circle of straight left beam
-        addTriangle(offset, -height, 0, x2, -height, z2, x1, -height, z1);
+        addTriangle(x2, -height, z2, offset, -height, 0, x1, -height, z1);
         //Vertical Triangles left beam
-        addTriangle(x1, y1, z1, x2, y1, z2, x1, y2, z1);
-        addTriangle(x1, y2, z1, x2, y1, z2, x2, y2, z2);
+        addTriangle(x2, y1, z2, x1, y1, z1, x1, y2, z1);
+        addTriangle(x2, y1, z2, x1, y2, z1, x2, y2, z2);
 
         y1 = 0;
         y2 = 0;
@@ -310,8 +310,8 @@ function makeArch(radialdivision, archdivision) {
 
             //now rotate complete object and translate
 
-            addTriangle(x1p, y1, z1, x2p, y2, z2, x3, y3, z1);
-            addTriangle(x3, y3, z1, x2p, y2, z2, x4, y4, z2);
+            addTriangle(x2p, y2, z2, x1p, y1, z1, x3, y3, z1);
+            addTriangle(x2p, y2, z2, x3, y3, z1, x4, y4, z2);
 
         }
 
@@ -319,10 +319,10 @@ function makeArch(radialdivision, archdivision) {
         y1 = -height;
         y2 = height;
         //Bottom Circle of straight right beam
-        addTriangle(offset, -height, 0, x3, -height, z1, x4, -height, z2);
+        addTriangle(x3, -height, z1, offset, -height, 0, x4, -height, z2);
         //Vertical Triangles right beam
-        addTriangle(x4, y1, z2, x3, y1, z1, x3, y2, z1);
-        addTriangle(x4, y1, z2, x3, y2, z1, x4, y2, z2);
+        addTriangle(x3, y1, z1, x4, y1, z2, x3, y2, z1);
+        addTriangle(x3, y2, z1, x4, y1, z2, x4, y2, z2);
     }
 }
 

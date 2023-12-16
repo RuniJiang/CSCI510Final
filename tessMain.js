@@ -5,6 +5,8 @@
 let gl,
   program,
   points,
+  pointsLastIndex,
+  previousIndex,
   bary,
   indices,
   projectionMatrix,
@@ -20,8 +22,8 @@ var myIndexBuffer = null;
 var division1 = 3;
 var division2 = 1;
 var updateDisplay = true;
-var anglesReset = [30.0, 30.0, 0.0];
-var angles = [30.0, 30.0, 0.0];
+var anglesReset = [0.0, 0.0, 0.0];
+var angles = [0.0, 0.0, 0.0];
 var angleInc = 5.0;
 
 // Shapes we can draw
@@ -31,7 +33,7 @@ var CONE = 3;
 var SPHERE = 4;
 var STAR = 5;
 var ARCH = 6;
-var curShape = CUBE;
+var curShape = STAR;
 
 // Given an id, extract the content's of a shader script
 // from the DOM and return the compiled shader
@@ -89,14 +91,15 @@ function initProgram() {
   program.uTheta = gl.getUniformLocation(program, 'theta');
 }
 
+
 // general call to make and bind a new object based on current
 // settings..Basically a call to shape specfic calls in cgIshape.js
-function createNewShape() {
+function createNewShape(shape) {
 
-  // clear your points and elements
-  points = [];
-  indices = [];
-  bary = [];
+
+  if (shape != undefined) {
+    curShape = shape;
+  }
 
   // make your shape based on type
   if (curShape == CUBE) {
@@ -110,42 +113,15 @@ function createNewShape() {
   else if (curShape == SPHERE) makeSphere(division1, division2);
   else if (curShape == STAR) makeStar(division1);
   else if (curShape == ARCH) makeArch(division1, division2);
-  else
+  else {
     console.error(`Bad object type`);
+    console.log(curShape)
+  }
 
-  //create and bind VAO
-  if (myVAO == null) myVAO = gl.createVertexArray();
-  gl.bindVertexArray(myVAO);
+  // update last index and previous index
+  previousIndex = pointsLastIndex;
+  pointsLastIndex = points.length;
 
-  // create and bind vertex buffer
-  if (myVertexBuffer == null) myVertexBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, myVertexBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(points), gl.STATIC_DRAW);
-  gl.enableVertexAttribArray(program.aVertexPosition);
-  gl.vertexAttribPointer(program.aVertexPosition, 4, gl.FLOAT, false, 0, 0);
-
-  // create and bind bary buffer
-  if (myBaryBuffer == null) myBaryBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, myBaryBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(bary), gl.STATIC_DRAW);
-  gl.enableVertexAttribArray(program.aBary);
-  gl.vertexAttribPointer(program.aBary, 3, gl.FLOAT, false, 0, 0);
-
-  // uniform values
-  gl.uniform3fv(program.uTheta, new Float32Array(angles));
-
-  // Setting up the IBO
-  if (myIndexBuffer == null) myIndexBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, myIndexBuffer);
-  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
-
-  // Clean
-  gl.bindVertexArray(null);
-  gl.bindBuffer(gl.ARRAY_BUFFER, null);
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
-
-  // indicate a redraw is required.
-  updateDisplay = true;
 }
 
 // We call draw to render to our canvas
@@ -158,7 +134,7 @@ function draw() {
   gl.bindVertexArray(myVAO);
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, myIndexBuffer);
 
-  
+
   // Draw to the scene using triangle primitives
   gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
 
@@ -210,21 +186,123 @@ function init() {
   const projectionMatrixLocation = gl.getUniformLocation(program, 'uProjectionMatrix');
   gl.uniformMatrix4fv(projectionMatrixLocation, false, projectionMatrix);
 
- // Set up the view matrix (position the camera)
- const eye = [0.0, 0.0, 1.5];  // Camera position (adjust as needed)
- const center = [0.0, 0.0, 0.0];  // Point the camera is looking at
- const up = [0.0, 1.0, 0.0];  // Up direction of the camera
+  // Set up the view matrix (position the camera)
+  const eye = [0.0, 0.0, 5.0];  // Camera position (adjust as needed)
+  const center = [0.0, 0.0, 0.0];  // Point the camera is looking at
+  const up = [0.0, 1.0, 0.0];  // Up direction of the camera
 
- const viewMatrix = mat4.create();
- mat4.lookAt(viewMatrix, eye, center, up);
+  const viewMatrix = mat4.create();
+  mat4.lookAt(viewMatrix, eye, center, up);
 
- const viewMatrixLocation = gl.getUniformLocation(program, 'uViewMatrix');
- gl.uniformMatrix4fv(viewMatrixLocation, false, viewMatrix);
+  const viewMatrixLocation = gl.getUniformLocation(program, 'uViewMatrix');
+  gl.uniformMatrix4fv(viewMatrixLocation, false, viewMatrix);
 
 
   // create and bind your current object
-  createNewShape();
 
+
+
+  createScene();
   // do a draw
   draw();
+}
+
+function createScene() {
+
+  // clear your points and elements
+  points = [];
+  indices = [];
+  bary = [];
+  pointsLastIndex = 0;
+
+  division1 = 1;
+  createNewShape(CUBE);
+  scalePoints(previousIndex, pointsLastIndex, .5);
+  translatePoints(previousIndex, pointsLastIndex, -1, 0, 0);
+
+  //division1 = 5;
+  createNewShape(CUBE);
+  scalePoints(previousIndex, pointsLastIndex, 2);
+  translatePoints(previousIndex, pointsLastIndex, 1, 1, 0);
+
+  //division1 = 4;
+  createNewShape(CUBE);
+  rotatePointsY(previousIndex, pointsLastIndex, radians(45));
+  translatePoints(previousIndex, pointsLastIndex, 0, -1, -.5);
+
+
+  //create and bind VAO
+  if (myVAO == null) myVAO = gl.createVertexArray();
+  gl.bindVertexArray(myVAO);
+
+  // create and bind vertex buffer
+  if (myVertexBuffer == null) myVertexBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, myVertexBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(points), gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(program.aVertexPosition);
+  gl.vertexAttribPointer(program.aVertexPosition, 4, gl.FLOAT, false, 0, 0);
+
+  // create and bind bary buffer
+  if (myBaryBuffer == null) myBaryBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, myBaryBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(bary), gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(program.aBary);
+  gl.vertexAttribPointer(program.aBary, 3, gl.FLOAT, false, 0, 0);
+
+  // uniform values
+  gl.uniform3fv(program.uTheta, new Float32Array(angles));
+
+  // Setting up the IBO
+  if (myIndexBuffer == null) myIndexBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, myIndexBuffer);
+  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+
+  // Clean
+  gl.bindVertexArray(null);
+  gl.bindBuffer(gl.ARRAY_BUFFER, null);
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+
+  // indicate a redraw is required.
+  updateDisplay = true;
+
+}
+
+function rotatePointsY(startIndex, endIndex, angle) {
+  //   x' = x *  cos(angle) + z * sin(angle);
+  //   y' = y;
+  //   z' = x * -sin(angle) + z * cos(angle);
+
+  for (let i = startIndex; i < endIndex; i += 4) {
+    const x = i;
+    const z = i + 2;
+    const xOrig = points[x];
+    const zOrig = points[z];
+
+    points[x] = xOrig * Math.cos(angle) + zOrig * Math.sin(angle);
+    points[z] = xOrig * -Math.sin(angle) + zOrig * Math.cos(angle);
+  }
+}
+
+function scalePoints(startIndex, endIndex, scale) {
+  for (let i = startIndex; i < endIndex; i++) {
+    if (i % 4 != 3) {
+      points[i] *= scale;
+    }
+  }
+}
+
+function translatePoints(startIndex, endIndex, xTranslate, yTranslate, zTranslate) {
+  for (let i = startIndex; i < endIndex; i++) {
+    switch (i % 4) {
+      case 0:
+        points[i] += xTranslate;
+        break;
+      case 1:
+        points[i] += yTranslate;
+        break;
+      case 2:
+        points[i] += zTranslate;
+        break;
+    }
+  }
 }
