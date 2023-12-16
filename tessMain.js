@@ -10,6 +10,7 @@ let gl,
   bary,
   indices,
   normals,
+  rotateTransformations,
   projectionMatrix,
   viewMatrix;
 
@@ -217,6 +218,7 @@ function createScene() {
   indices = [];
   bary = [];
   normals = [];
+  rotateTransformations = [];
   pointsLastIndex = 0;
 
   division1 = 1;
@@ -239,43 +241,43 @@ function createScene() {
   if (myVAO == null) myVAO = gl.createVertexArray();
   gl.bindVertexArray(myVAO);
 
-// create and bind vertex buffer
-if (myVertexBuffer == null) myVertexBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, myVertexBuffer);
-gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(points), gl.STATIC_DRAW);
-gl.enableVertexAttribArray(program.aVertexPosition);
-gl.vertexAttribPointer(program.aVertexPosition, 4, gl.FLOAT, false, 0, 0);
+  // create and bind vertex buffer
+  if (myVertexBuffer == null) myVertexBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, myVertexBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(points), gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(program.aVertexPosition);
+  gl.vertexAttribPointer(program.aVertexPosition, 4, gl.FLOAT, false, 0, 0);
 
-// create and bind bary buffer
-if (myBaryBuffer == null) myBaryBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, myBaryBuffer);
-gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(bary), gl.STATIC_DRAW);
-gl.enableVertexAttribArray(program.aBary);
-gl.vertexAttribPointer(program.aBary, 3, gl.FLOAT, false, 0, 0);
+  // create and bind bary buffer
+  if (myBaryBuffer == null) myBaryBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, myBaryBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(bary), gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(program.aBary);
+  gl.vertexAttribPointer(program.aBary, 3, gl.FLOAT, false, 0, 0);
 
-// Bind normal buffer
-if (myNormalBuffer == null) myNormalBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, myNormalBuffer);
-gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
-gl.enableVertexAttribArray(program.aNormal);
-gl.vertexAttribPointer(program.aNormal, 3, gl.FLOAT, false, 0, 0);
+  // Bind normal buffer
+  if (myNormalBuffer == null) myNormalBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, myNormalBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(program.aNormal);
+  gl.vertexAttribPointer(program.aNormal, 3, gl.FLOAT, false, 0, 0);
 
-// uniform values
-gl.uniform3fv(program.uTheta, new Float32Array(angles));
+  // uniform values
+  gl.uniform3fv(program.uTheta, new Float32Array(angles));
 
-// Setting up the IBO
-if (myIndexBuffer == null) myIndexBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, myIndexBuffer);
-gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+  // Setting up the IBO
+  if (myIndexBuffer == null) myIndexBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, myIndexBuffer);
+  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
 
-// Clean
-gl.bindVertexArray(null);
-gl.bindBuffer(gl.ARRAY_BUFFER, null);
-gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+  // Clean
+  gl.bindVertexArray(null);
+  gl.bindBuffer(gl.ARRAY_BUFFER, null);
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
 
-// indicate a redraw is required.
-updateDisplay = true;
-console.log(normals);
+  // indicate a redraw is required.
+  updateDisplay = true;
+  console.log(normals);
 
 }
 
@@ -289,6 +291,7 @@ function rotatePointsY(startIndex, endIndex, angle) {
     const z = i + 2;
     const xOrig = points[x];
     const zOrig = points[z];
+    rotateTransformations.push([0.0, angle, 0.0]);
 
     points[x] = xOrig * Math.cos(angle) + zOrig * Math.sin(angle);
     points[z] = xOrig * -Math.sin(angle) + zOrig * Math.cos(angle);
