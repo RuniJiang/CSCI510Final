@@ -8,11 +8,16 @@
         #version 300 es
         in vec4 aVertexPosition;
         in vec3 bary;
+        in vec3 aNormal;
+
         uniform vec3 theta;
         uniform mat4 uProjectionMatrix;
         uniform mat4 uViewMatrix;
 
         out vec3 vbc;
+        out vec3 vNormal;
+        out vec3 vLightDir;
+        out vec3 vColor;
 
         void main()
         {
@@ -43,6 +48,10 @@
 
             gl_Position = uProjectionMatrix * modelViewMatrix * aVertexPosition;
             vbc = bary;
+
+            // Transform the normal using the transpose of the inverse of the model matrix
+            mat3 normalMatrix = transpose(inverse(mat3(modelMatrix)));
+            vNormal = normalize(normalMatrix * aNormal);
         }
     </script>
 
@@ -52,6 +61,7 @@
          precision mediump float;
          
          in vec3 vbc;
+         in vec3 vNormal;
 
          // Color that is the result of this shader
          out vec4 fragColor;
@@ -60,9 +70,10 @@
              
              fragColor = vec4 (0.5, 0.5, 0.5, 1.0 );
            // if on the edge, draw black, otherwsie, draw grey
-           if (vbc.x < 0.01 || vbc.y < 0.01 || vbc.z < 0.01) {
-             fragColor = vec4 (1.0, 1.0, 1.0, 1.0);
-           }
+           //if (vbc.x < 0.01 || vbc.y < 0.01 || vbc.z < 0.01) {
+             //fragColor = vec4 (1.0, 1.0, 1.0, 1.0);
+           //}
+           fragColor = vec4(vNormal, 1.0);
          }
 
      </script>

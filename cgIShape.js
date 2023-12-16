@@ -343,12 +343,28 @@ function addTriangle(x0, y0, z0, x1, y1, z1, x2, y2, z2) {
 
     var nverts = points.length / 4;
 
+      // Calculate the normal of the triangle
+      var edge1 = [x1 - x0, y1 - y0, z1 - z0];
+      var edge2 = [x2 - x0, y2 - y0, z2 - z0];
+      var normal = [
+          edge1[1] * edge2[2] - edge1[2] * edge2[1],
+          edge1[2] * edge2[0] - edge1[0] * edge2[2],
+          edge1[0] * edge2[1] - edge1[1] * edge2[0]
+      ];
+  
+      // Normalize the normal
+      var length = Math.sqrt(normal[0] * normal[0] + normal[1] * normal[1] + normal[2] * normal[2]);
+      normal[0] /= length;
+      normal[1] /= length;
+      normal[2] /= length;
+
     // push first vertex
     points.push(x0); bary.push(1.0);
     points.push(y0); bary.push(0.0);
     points.push(z0); bary.push(0.0);
     points.push(1.0);
     indices.push(nverts);
+    normals.push(...normal);
     nverts++;
 
     // push second vertex
@@ -357,6 +373,7 @@ function addTriangle(x0, y0, z0, x1, y1, z1, x2, y2, z2) {
     points.push(z1); bary.push(0.0);
     points.push(1.0);
     indices.push(nverts);
+    normals.push(...normal);
     nverts++
 
     // push third vertex
@@ -365,6 +382,7 @@ function addTriangle(x0, y0, z0, x1, y1, z1, x2, y2, z2) {
     points.push(z2); bary.push(1.0);
     points.push(1.0);
     indices.push(nverts);
+    normals.push(...normal);
     nverts++;
 }
 

@@ -7,6 +7,7 @@ let gl,
   points,
   bary,
   indices,
+  normals,
   projectionMatrix,
   viewMatrix;
 
@@ -14,6 +15,7 @@ let gl,
 var myVAO = null;
 var myVertexBuffer = null;
 var myBaryBuffer = null;
+var myNormalBuffer = null;
 var myIndexBuffer = null;
 
 // Other globals with default values;
@@ -86,6 +88,7 @@ function initProgram() {
   // for easy access later in the code
   program.aVertexPosition = gl.getAttribLocation(program, 'aVertexPosition');
   program.aBary = gl.getAttribLocation(program, 'bary');
+  program.aNormal = gl.getAttribLocation(program, 'aNormal');
   program.uTheta = gl.getUniformLocation(program, 'theta');
 }
 
@@ -97,6 +100,7 @@ function createNewShape() {
   points = [];
   indices = [];
   bary = [];
+  normals = [];
 
   // make your shape based on type
   if (curShape == CUBE) {
@@ -131,6 +135,13 @@ function createNewShape() {
   gl.enableVertexAttribArray(program.aBary);
   gl.vertexAttribPointer(program.aBary, 3, gl.FLOAT, false, 0, 0);
 
+  // Bind normal buffer
+  if (myNormalBuffer == null) myNormalBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, myNormalBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(program.aNormal);
+  gl.vertexAttribPointer(program.aNormal, 3, gl.FLOAT, false, 0, 0);
+
   // uniform values
   gl.uniform3fv(program.uTheta, new Float32Array(angles));
 
@@ -146,6 +157,7 @@ function createNewShape() {
 
   // indicate a redraw is required.
   updateDisplay = true;
+  console.log(normals);
 }
 
 // We call draw to render to our canvas
@@ -158,7 +170,7 @@ function draw() {
   gl.bindVertexArray(myVAO);
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, myIndexBuffer);
 
-  
+
   // Draw to the scene using triangle primitives
   gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
 
@@ -210,16 +222,16 @@ function init() {
   const projectionMatrixLocation = gl.getUniformLocation(program, 'uProjectionMatrix');
   gl.uniformMatrix4fv(projectionMatrixLocation, false, projectionMatrix);
 
- // Set up the view matrix (position the camera)
- const eye = [0.0, 0.0, 1.5];  // Camera position (adjust as needed)
- const center = [0.0, 0.0, 0.0];  // Point the camera is looking at
- const up = [0.0, 1.0, 0.0];  // Up direction of the camera
+  // Set up the view matrix (position the camera)
+  const eye = [0.0, 0.0, 1.5];  // Camera position (adjust as needed)
+  const center = [0.0, 0.0, 0.0];  // Point the camera is looking at
+  const up = [0.0, 1.0, 0.0];  // Up direction of the camera
 
- const viewMatrix = mat4.create();
- mat4.lookAt(viewMatrix, eye, center, up);
+  const viewMatrix = mat4.create();
+  mat4.lookAt(viewMatrix, eye, center, up);
 
- const viewMatrixLocation = gl.getUniformLocation(program, 'uViewMatrix');
- gl.uniformMatrix4fv(viewMatrixLocation, false, viewMatrix);
+  const viewMatrixLocation = gl.getUniformLocation(program, 'uViewMatrix');
+  gl.uniformMatrix4fv(viewMatrixLocation, false, viewMatrix);
 
 
   // create and bind your current object
