@@ -249,6 +249,22 @@ function makeTree(green) {
   pointsLastIndex = points.length;
 }
 
+function makeDoubleArches() {
+  // draw gold arches
+  //247, 222, 134
+  let gold = [247 / 255, 222 / 255, 134 / 255];
+
+  makeArch(20, 25, 0.07, 1, 1, gold);
+  let tempPrev = pointsLastIndex;
+  let tempLast = points.length;
+  translatePoints(tempPrev, tempLast, 0, -.5, 0);
+
+
+
+  previousIndex = pointsLastIndex;
+  pointsLastIndex = points.length;
+}
+
 
 function createScene() {
 
@@ -268,8 +284,6 @@ function createScene() {
   scalePoints(previousIndex, pointsLastIndex, 10, 5, 10);
   translatePoints(previousIndex, pointsLastIndex, 0, -4.5, 0);
 
-
-
   makeTree();
   translatePoints(previousIndex, pointsLastIndex, -2, 0, 1);
 
@@ -280,6 +294,9 @@ function createScene() {
   makeTree();
   scalePoints(previousIndex, pointsLastIndex, .9, .9, .9);
   translatePoints(previousIndex, pointsLastIndex, 2, -.2, .5);
+
+
+  makeDoubleArches();
 
 
   // update last index and previous index

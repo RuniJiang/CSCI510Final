@@ -2,6 +2,14 @@ let moveSpeed = .1;
 let x = 0;
 let y = 1;
 let z = 2;
+
+function resetCamera() {
+    eye = [0.0, 0, 7.0];  // Camera position (adjust as needed)
+    center = [0.0, 0.0, 0.0];  // Point the camera is looking at
+    up = [0.0, 1.0, 0.0];  // Up direction of the camera
+    updateCamera();
+}
+
 function moveForward() {
     eye[z] -= moveSpeed;
     center[z] -= moveSpeed;

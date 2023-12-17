@@ -249,12 +249,12 @@ function makeStar(numPoints, color) {
 }
 
 // creates an arch that is 1 x .5
-function makeArch(radialdivision, archdivision, color) {
-    let radius = 0.05;  // radius of 0.5 = diameter 1
-    let height = .5;  // height of 1.0
+function makeArch(radialdivision, archdivision, radius, archRadius, height, color) {
+    //let radius = 0.05;  // radius of 0.5 = diameter 1
+    //let height = .5;  // height of 1.0
 
     let angleStep = radians(360 / radialdivision);
-    let archRadius = .25;
+    //let archRadius = .25;
     let archStep = radians(180 / archdivision);
 
     for (let i = 0; i < radialdivision; i++) {
