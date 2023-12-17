@@ -4,7 +4,7 @@
 // number of subdivisions along each cube face as given by the parameter
 //subdivisions
 //
-function makeCube(subdivisions) {
+function makeCube(subdivisions, color) {
 
     // fill in your code here.
     // delete the code below first.
@@ -24,28 +24,28 @@ function makeCube(subdivisions) {
             let b3 = 0.5 - (j + 1) * step;
 
             // Front face
-            addTriangle(a0, b0, 0.5, a2, b2, 0.5, a1, b1, 0.5);
-            addTriangle(a2, b2, 0.5, a3, b3, 0.5, a1, b1, 0.5);
+            addTriangle(a0, b0, 0.5, a2, b2, 0.5, a1, b1, 0.5, color);
+            addTriangle(a2, b2, 0.5, a3, b3, 0.5, a1, b1, 0.5, color);
 
             // Back face 
-            addTriangle(a0, b0, -0.5, a1, b1, -0.5, a2, b2, -0.5);
-            addTriangle(a2, b2, -0.5, a1, b1, -0.5, a3, b3, -0.5);
+            addTriangle(a0, b0, -0.5, a1, b1, -0.5, a2, b2, -0.5, color);
+            addTriangle(a2, b2, -0.5, a1, b1, -0.5, a3, b3, -0.5, color);
 
             // Right face
-            addTriangle(0.5, a0, b0, 0.5, a2, b2, 0.5, a1, b1);
-            addTriangle(0.5, a2, b2, 0.5, a3, b3, 0.5, a1, b1);
+            addTriangle(0.5, a0, b0, 0.5, a2, b2, 0.5, a1, b1, color);
+            addTriangle(0.5, a2, b2, 0.5, a3, b3, 0.5, a1, b1, color);
 
             // Left face 
-            addTriangle(-0.5, a0, b0, -0.5, a1, b1, -0.5, a2, b2);
-            addTriangle(-0.5, a2, b2, -0.5, a1, b1, -0.5, a3, b3);
+            addTriangle(-0.5, a0, b0, -0.5, a1, b1, -0.5, a2, b2, color);
+            addTriangle(-0.5, a2, b2, -0.5, a1, b1, -0.5, a3, b3, color);
 
             // Top face
-            addTriangle(a0, 0.5, b0, a1, 0.5, b1, a2, 0.5, b2);
-            addTriangle(a2, 0.5, b2, a1, 0.5, b1, a3, 0.5, b3);
+            addTriangle(a0, 0.5, b0, a1, 0.5, b1, a2, 0.5, b2, color);
+            addTriangle(a2, 0.5, b2, a1, 0.5, b1, a3, 0.5, b3, color);
 
             // // Bottom face 
-            addTriangle(a0, -0.5, b0, a2, -0.5, b2, a1, -0.5, b1);
-            addTriangle(a2, -0.5, b2, a3, -0.5, b3, a1, -0.5, b1);
+            addTriangle(a0, -0.5, b0, a2, -0.5, b2, a1, -0.5, b1, color);
+            addTriangle(a2, -0.5, b2, a3, -0.5, b3, a1, -0.5, b1, color);
         }
 
 
@@ -60,7 +60,7 @@ function makeCube(subdivisions) {
 // the number of subdivisions along the surface of the cylinder given by
 //heightdivision.
 //
-function makeCylinder(radialdivision, heightdivision, radius, height) {
+function makeCylinder(radialdivision, heightdivision, radius, height, color) {
     //let radius = 0.5;  // radius of 0.5 = diameter 1
     //let height = 1.0;  // height of 1.0
 
@@ -93,17 +93,17 @@ function makeCylinder(radialdivision, heightdivision, radius, height) {
             let z3 = radius * Math.sin(angle2);
 
             // Create triangles for the side of the cylinder
-            addTriangle(x0, y0, z0, x2, y2, z2, x1, y1, z1);
-            addTriangle(x1, y1, z1, x2, y2, z2, x3, y3, z3);
+            addTriangle(x0, y0, z0, x2, y2, z2, x1, y1, z1, color);
+            addTriangle(x1, y1, z1, x2, y2, z2, x3, y3, z3, color);
 
             // bottom and top caps
             if (j === 0) {
                 // Bottom 
-                addTriangle(0, -height / 2, 0, x0, -height / 2, z0, x1, -height / 2, z1);
+                addTriangle(0, -height / 2, 0, x0, -height / 2, z0, x1, -height / 2, z1, color);
             }
             if (j === heightdivision - 1) {
                 // Top 
-                addTriangle(0, height / 2, 0, x3, height / 2, z3, x2, height / 2, z2);
+                addTriangle(0, height / 2, 0, x3, height / 2, z3, x2, height / 2, z2, color);
             }
         }
     }
@@ -116,10 +116,11 @@ function makeCylinder(radialdivision, heightdivision, radius, height) {
 // and the number of subdivisions along the surface of the cone
 //given by heightdivision.
 //
-function makeCone(radialdivision, heightdivision, radius, height) {
+function makeCone(radialdivision, heightdivision, radius, height, color) {
     // fill in your code here.
     //let radius = 0.5;  // radius of 0.5
     //let height = 1.0;  // height of 1.0
+    console.log(color);
 
     let angleStep = radians(360 / radialdivision);
     let heightStep = height / heightdivision;
@@ -150,12 +151,12 @@ function makeCone(radialdivision, heightdivision, radius, height) {
             let z3 = radius * (1 - h2 / height) * Math.sin(angle2);
 
             // Create triangles for the side of the cone
-            addTriangle(x0, y0, z0, x2, y2, z2, x1, y1, z1);
-            addTriangle(x1, y1, z1, x2, y2, z2, x3, y3, z3);
+            addTriangle(x0, y0, z0, x2, y2, z2, x1, y1, z1, color);
+            addTriangle(x1, y1, z1, x2, y2, z2, x3, y3, z3, color);
 
             // Create triangles for the bottom
             if (j === 0) {
-                addTriangle(0, -height / 2, 0, x0, -height / 2, z0, x1, -height / 2, z1);
+                addTriangle(0, -height / 2, 0, x0, -height / 2, z0, x1, -height / 2, z1, color);
             }
         }
     }
@@ -169,7 +170,7 @@ function makeCone(radialdivision, heightdivision, radius, height) {
 // on spherical coordinates as described in the video (as opposed to the
 //recursive subdivision method).
 //
-function makeSphere(slices, stacks) {
+function makeSphere(slices, stacks, color) {
     // console.log(slices);
     // console.log(stacks);
 
@@ -202,15 +203,15 @@ function makeSphere(slices, stacks) {
             let y3 = radius * Math.sin(lat1) * Math.sin(long1);
             let z3 = radius * Math.cos(lat1);
 
-            addTriangle(x0, z0, y0, x2, z2, y2, x1, z1, y1);     // the z is the up for the sphere coordinator
-            addTriangle(x1, z1, y1, x2, z2, y2, x3, z3, y3);
+            addTriangle(x0, z0, y0, x2, z2, y2, x1, z1, y1, color);     // the z is the up for the sphere coordinator
+            addTriangle(x1, z1, y1, x2, z2, y2, x3, z3, y3, color);
 
         }
     }
 }
 
 // creates a 1 x 1 star with a set amount of points
-function makeStar(numPoints) {
+function makeStar(numPoints, color) {
     let innerRadius = 0.2;
     let outerRadius = 0.5;
     let angleStep = radians(360 / (numPoints * 2));
@@ -232,15 +233,15 @@ function makeStar(numPoints) {
         let leftCornerY = innerRadius * Math.sin(angle - angleStep);
 
         // front right half of point (triangles drawn counter-clockwise)
-        addTriangle(rightCornerX, rightCornerY, centerZ, centerX, centerY, outZ, starPointX, starPointY, centerZ);
+        addTriangle(rightCornerX, rightCornerY, centerZ, centerX, centerY, outZ, starPointX, starPointY, centerZ, color);
         // front left half of point
-        addTriangle(starPointX, starPointY, centerZ, centerX, centerY, outZ, leftCornerX, leftCornerY, centerZ);
+        addTriangle(starPointX, starPointY, centerZ, centerX, centerY, outZ, leftCornerX, leftCornerY, centerZ, color);
 
         outZ = -outZ;
         // back right half of point (triangles drawn counter-clockwise)
-        addTriangle(starPointX, starPointY, centerZ, centerX, centerY, outZ, rightCornerX, rightCornerY, centerZ);
+        addTriangle(starPointX, starPointY, centerZ, centerX, centerY, outZ, rightCornerX, rightCornerY, centerZ, color);
         // back left half of point
-        addTriangle(leftCornerX, leftCornerY, centerZ, centerX, centerY, outZ, starPointX, starPointY, centerZ);
+        addTriangle(leftCornerX, leftCornerY, centerZ, centerX, centerY, outZ, starPointX, starPointY, centerZ, color);
 
 
 
@@ -248,7 +249,7 @@ function makeStar(numPoints) {
 }
 
 // creates an arch that is 1 x .5
-function makeArch(radialdivision, archdivision) {
+function makeArch(radialdivision, archdivision, color) {
     let radius = 0.05;  // radius of 0.5 = diameter 1
     let height = .5;  // height of 1.0
 
@@ -275,10 +276,10 @@ function makeArch(radialdivision, archdivision) {
         x2 = radius * Math.cos(angle2) + offset;
 
         //Bottom Circle of straight left beam
-        addTriangle(x2, -height, z2, offset, -height, 0, x1, -height, z1);
+        addTriangle(x2, -height, z2, offset, -height, 0, x1, -height, z1, color);
         //Vertical Triangles left beam
-        addTriangle(x2, y1, z2, x1, y1, z1, x1, y2, z1);
-        addTriangle(x2, y1, z2, x1, y2, z1, x2, y2, z2);
+        addTriangle(x2, y1, z2, x1, y1, z1, x1, y2, z1, color);
+        addTriangle(x2, y1, z2, x1, y2, z1, x2, y2, z2, color);
 
         y1 = 0;
         y2 = 0;
@@ -309,8 +310,8 @@ function makeArch(radialdivision, archdivision) {
 
             //now rotate complete object and translate
 
-            addTriangle(x2p, y2, z2, x1p, y1, z1, x3, y3, z1);
-            addTriangle(x2p, y2, z2, x3, y3, z1, x4, y4, z2);
+            addTriangle(x2p, y2, z2, x1p, y1, z1, x3, y3, z1, color);
+            addTriangle(x2p, y2, z2, x3, y3, z1, x4, y4, z2, color);
 
         }
 
@@ -318,10 +319,10 @@ function makeArch(radialdivision, archdivision) {
         y1 = -height;
         y2 = height;
         //Bottom Circle of straight right beam
-        addTriangle(x3, -height, z1, offset, -height, 0, x4, -height, z2);
+        addTriangle(x3, -height, z1, offset, -height, 0, x4, -height, z2, color);
         //Vertical Triangles right beam
-        addTriangle(x3, y1, z1, x4, y1, z2, x3, y2, z1);
-        addTriangle(x3, y2, z1, x4, y1, z2, x4, y2, z2);
+        addTriangle(x3, y1, z1, x4, y1, z2, x3, y2, z1, color);
+        addTriangle(x3, y2, z1, x4, y1, z2, x4, y2, z2, color);
     }
 }
 
@@ -337,7 +338,12 @@ function radians(degrees) {
     return degrees * (pi / 180);
 }
 
-function addTriangle(x0, y0, z0, x1, y1, z1, x2, y2, z2) {
+function addTriangle(x0, y0, z0, x1, y1, z1, x2, y2, z2, color) {
+    if (color) {
+        console.log(color);
+    }
+
+    color = color || [.5, .5, .5];
 
 
     var nverts = points.length / 4;
@@ -364,6 +370,7 @@ function addTriangle(x0, y0, z0, x1, y1, z1, x2, y2, z2) {
     points.push(1.0);
     indices.push(nverts);
     normals.push(...normal);
+    colors.push(...color);
     nverts++;
 
     // push second vertex
@@ -373,6 +380,7 @@ function addTriangle(x0, y0, z0, x1, y1, z1, x2, y2, z2) {
     points.push(1.0);
     indices.push(nverts);
     normals.push(...normal);
+    colors.push(...color);
     nverts++
 
     // push third vertex
@@ -382,6 +390,7 @@ function addTriangle(x0, y0, z0, x1, y1, z1, x2, y2, z2) {
     points.push(1.0);
     indices.push(nverts);
     normals.push(...normal);
+    colors.push(...color);
     nverts++;
 }
 

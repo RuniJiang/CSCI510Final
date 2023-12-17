@@ -11,6 +11,7 @@
         in vec3 bary;
         in vec3 aNormal;
         in vec3 rotation;
+        in vec3 aColor;
 
         uniform vec3 theta;
         uniform mat4 uProjectionMatrix;
@@ -72,6 +73,9 @@
             vNormal = normalize(normalMatrix * aNormal);
             //vNormal = normalize(normalRotationMatrix * normalMatrix * aNormal);
 
+            //Pass color buffer to fragement shader
+            vColor = aColor;
+
             vLightDirection = -normalize(uViewMatrix * vec4(uLightDirection, 0.0)).xyz;
         }
     </script>
@@ -84,6 +88,7 @@
          in vec3 vbc;
          in vec3 vNormal;
          in vec3 vLightDirection;
+         in vec3 vColor;
 
          // Color that is the result of this shader
          out vec4 fragColor;
@@ -103,7 +108,7 @@
            float diffuseFactor = max(dot(normalize(vNormal), normalize(vLightDirection)), 0.0);
        
            // Set the color based on the dot product
-           fragColor = vec4(0.5 * diffuseFactor, 0.5 * diffuseFactor, 0.5 * diffuseFactor, 1.0);
+           fragColor = vec4(vColor.x * diffuseFactor, vColor.y * diffuseFactor, vColor.z * diffuseFactor, 1.0);
          }
 
      </script>
@@ -129,13 +134,13 @@
             //  incremental rotation
             if (key == 'x')
                 angles[0] -= angleInc;
-            else if (key == 'y')
+            else if (key == 'y' || key == 'ArrowLeft')
                 angles[1] -= angleInc;
             else if (key == 'z')
                 angles[2] -= angleInc;
             else if (key == 'X')
                 angles[0] += angleInc;
-            else if (key == 'Y')
+            else if (key == 'Y' || key == 'ArrowRight')
                 angles[1] += angleInc;
             else if (key == 'Z')
                 angles[2] += angleInc;
@@ -215,14 +220,6 @@
 
         else if (key == 'ArrowDown') {
             lookDown();
-        }
-
-        else if (key == 'ArrowLeft') {
-            lookLeft();
-        } 
-        
-        else if (key == 'ArrowRight') {
-            lookRight();
         }
 
         else if (key == ' ') {

@@ -10,6 +10,7 @@ let gl,
   bary,
   indices,
   normals,
+  colors,
   rotateTransformations,
   projectionMatrix,
   viewMatrix;
@@ -19,6 +20,7 @@ var myVAO = null;
 var myVertexBuffer = null;
 var myBaryBuffer = null;
 var myNormalBuffer = null;
+var myColorBuffer = null;
 var myRotationBuffer = null;
 var myIndexBuffer = null;
 
@@ -30,7 +32,7 @@ var anglesReset = [0.0, 0.0, 0.0];
 var angles = [0.0, 0.0, 0.0];
 var angleInc = 5.0;
 
-var lightDirection = [-0.8, -0.8, -1.0];
+var lightDirection = [-0.8, -1.5, -1.0];
 
 // Shapes we can draw
 var CUBE = 1;
@@ -43,7 +45,7 @@ var curShape = STAR;
 
 // Camera variables
 // Set up the view matrix (position the camera)
-let eye = [0.0, 0, 5.0];  // Camera position (adjust as needed)
+let eye = [0.0, 0, 7.0];  // Camera position (adjust as needed)
 let center = [0.0, 0.0, 0.0];  // Point the camera is looking at
 let up = [0.0, 1.0, 0.0];  // Up direction of the camera
 
@@ -101,6 +103,7 @@ function initProgram() {
   program.aVertexPosition = gl.getAttribLocation(program, 'aVertexPosition');
   program.aBary = gl.getAttribLocation(program, 'bary');
   program.aNormal = gl.getAttribLocation(program, 'aNormal');
+  program.aColor = gl.getAttribLocation(program, 'aColor');
   program.uTheta = gl.getUniformLocation(program, 'theta');
   program.uLightDir = gl.getUniformLocation(program, 'uLightDirection');
   program.aRotation = gl.getAttribLocation(program, 'rotation');
@@ -109,7 +112,7 @@ function initProgram() {
 
 // general call to make and bind a new object based on current
 // settings..Basically a call to shape specfic calls in cgIshape.js
-function createNewShape(shape) {
+function createNewShape(shape, color) {
 
 
   if (shape != undefined) {
@@ -118,16 +121,16 @@ function createNewShape(shape) {
 
   // make your shape based on type
   if (curShape == CUBE) {
-    makeCube(division1);
+    makeCube(division1, color);
     //load identity matrix
     // matrix tranform
     // 
   }
-  else if (curShape == CYLINDER) makeCylinder(division1, division2);
-  else if (curShape == CONE) makeCone(division1, division2);
-  else if (curShape == SPHERE) makeSphere(division1, division2);
-  else if (curShape == STAR) makeStar(division1);
-  else if (curShape == ARCH) makeArch(division1, division2);
+  else if (curShape == CYLINDER) makeCylinder(division1, division2, color);
+  else if (curShape == CONE) makeCone(division1, division2, color);
+  else if (curShape == SPHERE) makeSphere(division1, division2, color);
+  else if (curShape == STAR) makeStar(division1, color);
+  else if (curShape == ARCH) makeArch(division1, division2, color);
   else {
     console.error(`Bad object type`);
     console.log(curShape)
@@ -218,26 +221,28 @@ function init() {
 
 
 
-function makeTree() {
-  makeCone(45, 1, 0.5, 1);
+function makeTree(green) {
+  green = green || [176 / 255, 222 / 235, 162 / 255];
+  let brown = [99 / 255, 66 / 255, 5 / 255];
+  makeCone(100, 1, 0.5, 1, green);
   let tempPrev = pointsLastIndex;
   let tempLast = points.length;
-  translatePoints(tempPrev, tempLast, 0, 1, 0);
-
-  makeCone(45, 1, 0.7, 1.2);
-  tempPrev = tempLast;
-  tempLast = points.length;
   translatePoints(tempPrev, tempLast, 0, .4, 0);
 
-  makeCone(45, 1, .95, 1.5);
+  makeCone(100, 1, 0.75, 1.3, green);
   tempPrev = tempLast;
   tempLast = points.length;
   translatePoints(tempPrev, tempLast, 0, -.2, 0);
 
-  makeCylinder(45, 1, .4, .5);
+  makeCone(100, 1, .95, 1.5, green);
   tempPrev = tempLast;
   tempLast = points.length;
-  translatePoints(tempPrev, tempLast, 0, -1.2, 0);
+  translatePoints(tempPrev, tempLast, 0, -.8, 0);
+
+  makeCylinder(100, 1, .4, .5, brown);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, 0, -1.8, 0);
 
   previousIndex = pointsLastIndex;
   pointsLastIndex = points.length;
@@ -251,28 +256,46 @@ function createScene() {
   indices = [];
   bary = [];
   normals = [];
+  colors = [];
   rotateTransformations = [];
   pointsLastIndex = 0;
 
+
+  //make base
+  //division1 = 5;
+  createNewShape(CUBE, [155 / 255, 208 / 255, 209 / 255]);
+  scalePoints(previousIndex, pointsLastIndex, 10, 5, 10);
+  translatePoints(previousIndex, pointsLastIndex, 0, -4.5, 0);
+
+
+
   makeTree();
+  translatePoints(previousIndex, pointsLastIndex, -2, 0, 1.5);
+
+  makeTree();
+  scalePoints(previousIndex, pointsLastIndex, 1.3, 1.3, 1.3);
+  translatePoints(previousIndex, pointsLastIndex, 0, .5, -1.5);
   // update last index and previous index
 
+
+  /*
   division1 = 1;
   createNewShape(CUBE);
-  scalePoints(previousIndex, pointsLastIndex, .5);
+  scalePoints(previousIndex, pointsLastIndex, .5, .5, .5);
   rotatePointsY(previousIndex, pointsLastIndex, radians(0));
   translatePoints(previousIndex, pointsLastIndex, -1, 0, 0);
 
   //division1 = 5;
   createNewShape(CUBE);
-  scalePoints(previousIndex, pointsLastIndex, 2);
-  rotatePointsY(previousIndex, pointsLastIndex, radians(0));
+  scalePoints(previousIndex, pointsLastIndex, 2, 2, 2);
+  rotatePointsY(previousIndex, pointsLastIndex, radians(45));
   translatePoints(previousIndex, pointsLastIndex, 1, 1, 0);
 
   //division1 = 4;
   createNewShape(CUBE);
-  rotatePointsY(previousIndex, pointsLastIndex, radians(45));
+  rotatePointsY(previousIndex, pointsLastIndex, radians(30));
   translatePoints(previousIndex, pointsLastIndex, 0, -1, -.5);
+  */
 
 
   //create and bind VAO
@@ -299,6 +322,13 @@ function createScene() {
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
   gl.enableVertexAttribArray(program.aNormal);
   gl.vertexAttribPointer(program.aNormal, 3, gl.FLOAT, false, 0, 0);
+
+  // Bind normal buffer
+  if (myColorBuffer == null) myColorBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, myColorBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(program.aColor);
+  gl.vertexAttribPointer(program.aColor, 3, gl.FLOAT, false, 0, 0);
 
   if (myRotationBuffer == null) myRotationBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, myRotationBuffer);
@@ -343,10 +373,18 @@ function rotatePointsY(startIndex, endIndex, angle) {
   }
 }
 
-function scalePoints(startIndex, endIndex, scale) {
+function scalePoints(startIndex, endIndex, scaleX, scaleY, scaleZ) {
   for (let i = startIndex; i < endIndex; i++) {
-    if (i % 4 != 3) {
-      points[i] *= scale;
+    switch (i % 4) {
+      case 0:
+        points[i] *= scaleX;
+        break;
+      case 1:
+        points[i] *= scaleY;
+        break;
+      case 2:
+        points[i] *= scaleZ;
+        break;
     }
   }
 }
