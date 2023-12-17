@@ -11,7 +11,6 @@ let gl,
   indices,
   normals,
   colors,
-  rotateTransformations,
   projectionMatrix,
   viewMatrix;
 
@@ -21,7 +20,6 @@ var myVertexBuffer = null;
 var myBaryBuffer = null;
 var myNormalBuffer = null;
 var myColorBuffer = null;
-var myRotationBuffer = null;
 var myIndexBuffer = null;
 
 // Other globals with default values;
@@ -107,7 +105,6 @@ function initProgram() {
   program.aColor = gl.getAttribLocation(program, 'aColor');
   program.uTheta = gl.getUniformLocation(program, 'theta');
   program.uLightDir = gl.getUniformLocation(program, 'uLightDirection');
-  program.aRotation = gl.getAttribLocation(program, 'rotation');
 }
 
 
@@ -274,7 +271,6 @@ function createScene() {
   bary = [];
   normals = [];
   colors = [];
-  rotateTransformations = [];
   pointsLastIndex = 0;
 
 
@@ -353,12 +349,6 @@ function createScene() {
   gl.enableVertexAttribArray(program.aColor);
   gl.vertexAttribPointer(program.aColor, 3, gl.FLOAT, false, 0, 0);
 
-  if (myRotationBuffer == null) myRotationBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, myRotationBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rotateTransformations), gl.STATIC_DRAW);
-  gl.enableVertexAttribArray(program.aRotation);
-  gl.vertexAttribPointer(program.aRotation, 3, gl.FLOAT, false, 0, 0);
-
   // uniform values
   gl.uniform3fv(program.uTheta, new Float32Array(angles));
   gl.uniform3fv(program.uLightDir, new Float32Array(lightDirection));
@@ -390,7 +380,6 @@ function rotatePointsY(startIndex, endIndex, angle) {
     const z = i + 2;
     const xOrig = points[x];
     const zOrig = points[z];
-    rotateTransformations.push([0.0, angle, 0.0]);
     console.log(angle);
     points[x] = xOrig * Math.cos(angle) + zOrig * Math.sin(angle);
     points[z] = xOrig * -Math.sin(angle) + zOrig * Math.cos(angle);

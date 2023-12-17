@@ -10,7 +10,6 @@
         in vec4 aVertexPosition;
         in vec3 bary;
         in vec4 aNormal;
-        in vec3 rotation;
         in vec3 aColor;
 
         uniform vec3 theta;
@@ -54,24 +53,11 @@
             vbc = bary;
 
             // Transform the normal using the transpose of the inverse of the model matrix
-            // mat3 normalMatrix = transpose(inverse(mat3(modelMatrix)));
-            //vNormal = normalize(normalMatrix * aNormal);
-
-            // Transform the normal using the transpose of the inverse of the model matrix
             mat4 normalMatrix = transpose(inverse((modelMatrix)));
-        
 
-
-            //Additional rotation matrix for normals
-            //mat3 normalRotationMatrix = mat3(
-            //    cos(radians(rotation.y)) * cos(radians(rotation.z)), -cos(radians(rotation.x)) * sin(radians(rotation.z)) + sin(radians(rotation.x)) * sin(radians(rotation.y)) * cos(radians(rotation.z)), sin(radians(rotation.x)) * sin(radians(rotation.z)) + cos(radians(rotation.x)) * sin(radians(rotation.y)) * cos(radians(rotation.z)),
-            //    cos(radians(rotation.y)) * sin(radians(rotation.z)), cos(radians(rotation.x)) * cos(radians(rotation.z)) + sin(radians(rotation.x)) * sin(radians(rotation.y)) * sin(radians(rotation.z)), -sin(radians(rotation.x)) * cos(radians(rotation.z)) + cos(radians(rotation.x)) * sin(radians(rotation.y)) * sin(radians(rotation.z)),
-            //    -sin(radians(rotation.y)), sin(radians(rotation.x)) * cos(radians(rotation.y)), cos(radians(rotation.x)) * cos(radians(rotation.y))
-            //);
             
             // Apply additional rotation to the normals
             vNormal = normalize(normalMatrix * aNormal);
-            //vNormal = normalize(normalRotationMatrix * normalMatrix * aNormal);
 
             //Pass color buffer to fragement shader
             vColor = aColor;
