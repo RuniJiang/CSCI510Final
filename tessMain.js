@@ -19,6 +19,7 @@ var myVAO = null;
 var myVertexBuffer = null;
 var myBaryBuffer = null;
 var myNormalBuffer = null;
+var myRotationBuffer = null;
 var myIndexBuffer = null;
 
 // Other globals with default values;
@@ -28,6 +29,8 @@ var updateDisplay = true;
 var anglesReset = [0.0, 0.0, 0.0];
 var angles = [0.0, 0.0, 0.0];
 var angleInc = 5.0;
+
+var lightDirection = [-0.8, -0.8, -1.0];
 
 // Shapes we can draw
 var CUBE = 1;
@@ -99,6 +102,8 @@ function initProgram() {
   program.aBary = gl.getAttribLocation(program, 'bary');
   program.aNormal = gl.getAttribLocation(program, 'aNormal');
   program.uTheta = gl.getUniformLocation(program, 'theta');
+  program.uLightDir = gl.getUniformLocation(program, 'uLightDirection');
+  program.aRotation = gl.getAttribLocation(program, 'rotation');
 }
 
 
@@ -169,7 +174,7 @@ function init() {
   // Retrieve a WebGL context
   gl = canvas.getContext('webgl2');
   // Set the clear color to be black
-  gl.clearColor(0, 0, 0, 1);
+  gl.clearColor(0.6, 0.9, 1, 1);
 
   // some GL initialization
   gl.enable(gl.DEPTH_TEST);
@@ -177,7 +182,7 @@ function init() {
 
   gl.cullFace(gl.BACK);
   gl.frontFace(gl.CCW);
-  gl.clearColor(0.0, 0.0, 0.0, 1.0)
+  gl.clearColor(0.6, 0.9, 1, 1)
   gl.depthFunc(gl.LEQUAL)
   gl.clearDepth(1.0)
 
@@ -255,11 +260,13 @@ function createScene() {
   division1 = 1;
   createNewShape(CUBE);
   scalePoints(previousIndex, pointsLastIndex, .5);
+  rotatePointsY(previousIndex, pointsLastIndex, radians(0));
   translatePoints(previousIndex, pointsLastIndex, -1, 0, 0);
 
   //division1 = 5;
   createNewShape(CUBE);
   scalePoints(previousIndex, pointsLastIndex, 2);
+  rotatePointsY(previousIndex, pointsLastIndex, radians(0));
   translatePoints(previousIndex, pointsLastIndex, 1, 1, 0);
 
   //division1 = 4;
@@ -293,8 +300,15 @@ function createScene() {
   gl.enableVertexAttribArray(program.aNormal);
   gl.vertexAttribPointer(program.aNormal, 3, gl.FLOAT, false, 0, 0);
 
+  if (myRotationBuffer == null) myRotationBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, myRotationBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rotateTransformations), gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(program.aRotation);
+  gl.vertexAttribPointer(program.aRotation, 3, gl.FLOAT, false, 0, 0);
+
   // uniform values
   gl.uniform3fv(program.uTheta, new Float32Array(angles));
+  gl.uniform3fv(program.uLightDir, new Float32Array(lightDirection));
 
   // Setting up the IBO
   if (myIndexBuffer == null) myIndexBuffer = gl.createBuffer();
@@ -323,7 +337,7 @@ function rotatePointsY(startIndex, endIndex, angle) {
     const xOrig = points[x];
     const zOrig = points[z];
     rotateTransformations.push([0.0, angle, 0.0]);
-
+    console.log(angle);
     points[x] = xOrig * Math.cos(angle) + zOrig * Math.sin(angle);
     points[z] = xOrig * -Math.sin(angle) + zOrig * Math.cos(angle);
   }
