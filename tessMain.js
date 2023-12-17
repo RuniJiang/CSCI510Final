@@ -222,22 +222,22 @@ function init() {
 function makeTree(green) {
   green = green || [176 / 255, 222 / 235, 162 / 255];
   let brown = [99 / 255, 66 / 255, 5 / 255];
-  makeCone(100, 1, 0.5, 1, green);
+  makeCone(50, 1, 0.5, 1, green);
   let tempPrev = pointsLastIndex;
   let tempLast = points.length;
   translatePoints(tempPrev, tempLast, 0, .4, 0);
 
-  makeCone(100, 1, 0.75, 1.3, green);
+  makeCone(50, 1, 0.75, 1.3, green);
   tempPrev = tempLast;
   tempLast = points.length;
   translatePoints(tempPrev, tempLast, 0, -.2, 0);
 
-  makeCone(100, 1, .95, 1.5, green);
+  makeCone(50, 1, .95, 1.5, green);
   tempPrev = tempLast;
   tempLast = points.length;
   translatePoints(tempPrev, tempLast, 0, -.8, 0);
 
-  makeCylinder(100, 1, .4, .5, brown);
+  makeCylinder(50, 1, .4, .5, brown);
   tempPrev = tempLast;
   tempLast = points.length;
   translatePoints(tempPrev, tempLast, 0, -1.8, 0);
@@ -246,16 +246,20 @@ function makeTree(green) {
   pointsLastIndex = points.length;
 }
 
-function makeDoubleArches() {
+function makeDoubleArches(archRadius1, height1, archRadius2, height2) {
   // draw gold arches
   //247, 222, 134
-  let gold = [247 / 255, 222 / 255, 134 / 255];
+  let gold = [255 / 255, 222 / 255, 102 / 255];
 
-  makeArch(20, 25, 0.07, 1, 1, gold);
+  makeArch(20, 20, 0.06, archRadius1, height1, gold);
   let tempPrev = pointsLastIndex;
   let tempLast = points.length;
-  translatePoints(tempPrev, tempLast, 0, -.5, 0);
+  translatePoints(tempPrev, tempLast, 0, -.8, 0);
 
+  makeArch(20, 20, 0.06, archRadius2, height2, gold);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, 0, -1, 0);
 
 
   previousIndex = pointsLastIndex;
@@ -280,20 +284,33 @@ function createScene() {
   scalePoints(previousIndex, pointsLastIndex, 10, 5, 10);
   translatePoints(previousIndex, pointsLastIndex, 0, -4.5, 0);
 
-  makeTree();
-  translatePoints(previousIndex, pointsLastIndex, -2, 0, 1);
-
-  makeTree();
-  scalePoints(previousIndex, pointsLastIndex, 1.3, 1.4, 1.3);
-  translatePoints(previousIndex, pointsLastIndex, .3, .8, -1.5);
+  let baseIndexEnd = pointsLastIndex;
 
   makeTree();
   scalePoints(previousIndex, pointsLastIndex, .9, .9, .9);
-  translatePoints(previousIndex, pointsLastIndex, 2, -.2, .5);
+  translatePoints(previousIndex, pointsLastIndex, -1.2, 0, 1.8);
+
+  makeTree();
+  scalePoints(previousIndex, pointsLastIndex, 1.5, 1.4, 1.5);
+  translatePoints(previousIndex, pointsLastIndex, .5, .8, -1.8);
+
+  makeTree();
+  scalePoints(previousIndex, pointsLastIndex, .9, .9, .9);
+  translatePoints(previousIndex, pointsLastIndex, 1.5, -.2, 1);
 
 
-  makeDoubleArches();
+  makeDoubleArches(1, 1.1, .75, 1.3);
+  rotatePointsY(previousIndex, pointsLastIndex, radians(40));
+  translatePoints(previousIndex, pointsLastIndex, -1.3, 0, .5);
 
+
+  makeDoubleArches(.9, 1.7, .65, 1.9);
+  //scalePoints(previousIndex, pointsLastIndex, 1.1, 1.1, 1.1);
+  rotatePointsY(previousIndex, pointsLastIndex, radians(-20));
+  translatePoints(previousIndex, pointsLastIndex, 1.9, 0, 0);
+
+
+  rotatePointsY(baseIndexEnd, pointsLastIndex, radians(-5));
 
   // update last index and previous index
 
@@ -365,7 +382,6 @@ function createScene() {
 
   // indicate a redraw is required.
   updateDisplay = true;
-  console.log(normals);
 
 }
 
@@ -380,7 +396,6 @@ function rotatePointsY(startIndex, endIndex, angle) {
     const z = i + 2;
     const xOrig = points[x];
     const zOrig = points[z];
-    console.log(angle);
     points[x] = xOrig * Math.cos(angle) + zOrig * Math.sin(angle);
     points[z] = xOrig * -Math.sin(angle) + zOrig * Math.cos(angle);
 

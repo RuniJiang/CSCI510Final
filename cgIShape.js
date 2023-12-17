@@ -120,7 +120,6 @@ function makeCone(radialdivision, heightdivision, radius, height, color) {
     // fill in your code here.
     //let radius = 0.5;  // radius of 0.5
     //let height = 1.0;  // height of 1.0
-    console.log(color);
 
     let angleStep = radians(360 / radialdivision);
     let heightStep = height / heightdivision;
@@ -339,9 +338,6 @@ function radians(degrees) {
 }
 
 function addTriangle(x0, y0, z0, x1, y1, z1, x2, y2, z2, color) {
-    if (color) {
-        console.log(color);
-    }
 
     color = color || [.5, .5, .5];
 
