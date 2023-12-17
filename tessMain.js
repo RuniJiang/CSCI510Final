@@ -211,6 +211,34 @@ function init() {
   draw();
 }
 
+
+
+function makeTree() {
+  makeCone(45, 1, 0.5, 1);
+  let tempPrev = pointsLastIndex;
+  let tempLast = points.length;
+  translatePoints(tempPrev, tempLast, 0, 1, 0);
+
+  makeCone(45, 1, 0.7, 1.2);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, 0, .4, 0);
+
+  makeCone(45, 1, .95, 1.5);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, 0, -.2, 0);
+
+  makeCylinder(45, 1, .4, .5);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, 0, -1.2, 0);
+
+  previousIndex = pointsLastIndex;
+  pointsLastIndex = points.length;
+}
+
+
 function createScene() {
 
   // clear your points and elements
@@ -220,6 +248,9 @@ function createScene() {
   normals = [];
   rotateTransformations = [];
   pointsLastIndex = 0;
+
+  makeTree();
+  // update last index and previous index
 
   division1 = 1;
   createNewShape(CUBE);
