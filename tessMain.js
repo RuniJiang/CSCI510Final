@@ -33,6 +33,7 @@ var angles = [0.0, 0.0, 0.0];
 var angleInc = 5.0;
 
 var lightDirection = [-0.8, -1.5, -1.0];
+var lightDirection = [-0.8, -1.5, -1.0];
 
 // Shapes we can draw
 var CUBE = 1;
@@ -270,13 +271,18 @@ function createScene() {
 
 
   makeTree();
-  translatePoints(previousIndex, pointsLastIndex, -2, 0, 1.5);
+  translatePoints(previousIndex, pointsLastIndex, -2, 0, 1);
 
   makeTree();
-  scalePoints(previousIndex, pointsLastIndex, 1.3, 1.3, 1.3);
-  translatePoints(previousIndex, pointsLastIndex, 0, .5, -1.5);
-  // update last index and previous index
+  scalePoints(previousIndex, pointsLastIndex, 1.3, 1.4, 1.3);
+  translatePoints(previousIndex, pointsLastIndex, .3, .8, -1.5);
 
+  makeTree();
+  scalePoints(previousIndex, pointsLastIndex, .9, .9, .9);
+  translatePoints(previousIndex, pointsLastIndex, 2, -.2, .5);
+
+
+  // update last index and previous index
 
   /*
   division1 = 1;
@@ -321,7 +327,7 @@ function createScene() {
   gl.bindBuffer(gl.ARRAY_BUFFER, myNormalBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
   gl.enableVertexAttribArray(program.aNormal);
-  gl.vertexAttribPointer(program.aNormal, 3, gl.FLOAT, false, 0, 0);
+  gl.vertexAttribPointer(program.aNormal, 4, gl.FLOAT, false, 0, 0);
 
   // Bind normal buffer
   if (myColorBuffer == null) myColorBuffer = gl.createBuffer();
@@ -363,6 +369,7 @@ function rotatePointsY(startIndex, endIndex, angle) {
 
   for (let i = startIndex; i < endIndex; i += 4) {
     const x = i;
+    const y = i + 1;
     const z = i + 2;
     const xOrig = points[x];
     const zOrig = points[z];
@@ -370,6 +377,16 @@ function rotatePointsY(startIndex, endIndex, angle) {
     console.log(angle);
     points[x] = xOrig * Math.cos(angle) + zOrig * Math.sin(angle);
     points[z] = xOrig * -Math.sin(angle) + zOrig * Math.cos(angle);
+
+    const xNOrig = normals[x];
+    const zNOrig = normals[z];
+    normals[x] = xNOrig * Math.cos(angle) + zNOrig * Math.sin(angle);
+    normals[z] = xNOrig * -Math.sin(angle) + zNOrig * Math.cos(angle);
+
+    var length = Math.sqrt(normals[x] * normals[x] + normals[y] * normals[y] + normals[z] * normals[z]);
+    normals[x] /= length;
+    normals[y] /= length;
+    normals[z] /= length;
   }
 }
 
