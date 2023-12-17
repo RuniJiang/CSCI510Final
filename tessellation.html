@@ -15,10 +15,11 @@
         uniform vec3 theta;
         uniform mat4 uProjectionMatrix;
         uniform mat4 uViewMatrix;
+        uniform vec3 uLightDirection;
 
         out vec3 vbc;
         out vec3 vNormal;
-        out vec3 vLightDir;
+        out vec3 vLightDirection;
         out vec3 vColor;
 
         void main()
@@ -52,21 +53,26 @@
             vbc = bary;
 
             // Transform the normal using the transpose of the inverse of the model matrix
-            mat3 normalMatrix = transpose(inverse(mat3(modelMatrix)));
-            vNormal = normalize(normalMatrix * aNormal);
+            // mat3 normalMatrix = transpose(inverse(mat3(modelMatrix)));
+            //vNormal = normalize(normalMatrix * aNormal);
 
             // Transform the normal using the transpose of the inverse of the model matrix
-            //mat3 normalMatrix = transpose(inverse(mat3(modelMatrix)));
+            mat3 normalMatrix = transpose(inverse(mat3((modelMatrix))));
         
-            // Additional rotation matrix for normals
-           // mat3 normalRotationMatrix = mat3(
-           // cos(radians(rotation.y)) * cos(radians(rotation.z)), -cos(radians(rotation.x)) * sin(radians(rotation.z)) + sin(radians(rotation.x)) * sin(radians(rotation.y)) * cos(radians(rotation.z)), sin(radians(rotation.x)) * sin(radians(rotation.z)) + cos(radians(rotation.x)) * sin(radians(rotation.y)) * cos(radians(rotation.z)),
-           // cos(radians(rotation.y)) * sin(radians(rotation.z)), cos(radians(rotation.x)) * cos(radians(rotation.z)) + sin(radians(rotation.x)) * sin(radians(rotation.y)) * sin(radians(rotation.z)), -sin(radians(rotation.x)) * cos(radians(rotation.z)) + cos(radians(rotation.x)) * sin(radians(rotation.y)) * sin(radians(rotation.z)),
-           // -sin(radians(rotation.y)), sin(radians(rotation.x)) * cos(radians(rotation.y)), cos(radians(rotation.x)) * cos(radians(rotation.y))
-           // );
+
+
+            //Additional rotation matrix for normals
+            //mat3 normalRotationMatrix = mat3(
+            //    cos(radians(rotation.y)) * cos(radians(rotation.z)), -cos(radians(rotation.x)) * sin(radians(rotation.z)) + sin(radians(rotation.x)) * sin(radians(rotation.y)) * cos(radians(rotation.z)), sin(radians(rotation.x)) * sin(radians(rotation.z)) + cos(radians(rotation.x)) * sin(radians(rotation.y)) * cos(radians(rotation.z)),
+            //    cos(radians(rotation.y)) * sin(radians(rotation.z)), cos(radians(rotation.x)) * cos(radians(rotation.z)) + sin(radians(rotation.x)) * sin(radians(rotation.y)) * sin(radians(rotation.z)), -sin(radians(rotation.x)) * cos(radians(rotation.z)) + cos(radians(rotation.x)) * sin(radians(rotation.y)) * sin(radians(rotation.z)),
+            //    -sin(radians(rotation.y)), sin(radians(rotation.x)) * cos(radians(rotation.y)), cos(radians(rotation.x)) * cos(radians(rotation.y))
+            //);
             
             // Apply additional rotation to the normals
-           // vNormal = normalize(normalRotationMatrix * normalMatrix * aNormal);
+            vNormal = normalize(normalMatrix * aNormal);
+            //vNormal = normalize(normalRotationMatrix * normalMatrix * aNormal);
+
+            vLightDirection = -normalize(uViewMatrix * vec4(uLightDirection, 0.0)).xyz;
         }
     </script>
 
@@ -77,6 +83,7 @@
          
          in vec3 vbc;
          in vec3 vNormal;
+         in vec3 vLightDirection;
 
          // Color that is the result of this shader
          out vec4 fragColor;
@@ -89,6 +96,14 @@
              //fragColor = vec4 (1.0, 1.0, 1.0, 1.0);
            //}
            fragColor = vec4(vNormal, 1.0);
+
+
+           // Lighting
+           // Calculate the dot product between the normal and light direction
+           float diffuseFactor = max(dot(normalize(vNormal), normalize(vLightDirection)), 0.0);
+       
+           // Set the color based on the dot product
+           fragColor = vec4(0.5 * diffuseFactor, 0.5 * diffuseFactor, 0.5 * diffuseFactor, 1.0);
          }
 
      </script>

@@ -30,6 +30,8 @@ var anglesReset = [0.0, 0.0, 0.0];
 var angles = [0.0, 0.0, 0.0];
 var angleInc = 5.0;
 
+var lightDirection = [-0.8, -0.8, -1.0];
+
 // Shapes we can draw
 var CUBE = 1;
 var CYLINDER = 2;
@@ -100,6 +102,7 @@ function initProgram() {
   program.aBary = gl.getAttribLocation(program, 'bary');
   program.aNormal = gl.getAttribLocation(program, 'aNormal');
   program.uTheta = gl.getUniformLocation(program, 'theta');
+  program.uLightDir = gl.getUniformLocation(program, 'uLightDirection');
   program.aRotation = gl.getAttribLocation(program, 'rotation');
 }
 
@@ -171,7 +174,7 @@ function init() {
   // Retrieve a WebGL context
   gl = canvas.getContext('webgl2');
   // Set the clear color to be black
-  gl.clearColor(0, 0, 0, 1);
+  gl.clearColor(0.6, 0.9, 1, 1);
 
   // some GL initialization
   gl.enable(gl.DEPTH_TEST);
@@ -179,7 +182,7 @@ function init() {
 
   gl.cullFace(gl.BACK);
   gl.frontFace(gl.CCW);
-  gl.clearColor(0.0, 0.0, 0.0, 1.0)
+  gl.clearColor(0.6, 0.9, 1, 1)
   gl.depthFunc(gl.LEQUAL)
   gl.clearDepth(1.0)
 
@@ -274,6 +277,7 @@ function createScene() {
 
   // uniform values
   gl.uniform3fv(program.uTheta, new Float32Array(angles));
+  gl.uniform3fv(program.uLightDir, new Float32Array(lightDirection));
 
   // Setting up the IBO
   if (myIndexBuffer == null) myIndexBuffer = gl.createBuffer();
