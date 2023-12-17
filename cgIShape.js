@@ -348,7 +348,8 @@ function addTriangle(x0, y0, z0, x1, y1, z1, x2, y2, z2) {
     var normal = [
         edge1[1] * edge2[2] - edge1[2] * edge2[1],
         edge1[2] * edge2[0] - edge1[0] * edge2[2],
-        edge1[0] * edge2[1] - edge1[1] * edge2[0]
+        edge1[0] * edge2[1] - edge1[1] * edge2[0],
+        1.0
     ];
 
     // Normalize the normal

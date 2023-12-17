@@ -9,7 +9,7 @@
         #version 300 es
         in vec4 aVertexPosition;
         in vec3 bary;
-        in vec3 aNormal;
+        in vec4 aNormal;
         in vec3 rotation;
 
         uniform vec3 theta;
@@ -18,7 +18,7 @@
         uniform vec3 uLightDirection;
 
         out vec3 vbc;
-        out vec3 vNormal;
+        out vec4 vNormal;
         out vec3 vLightDirection;
         out vec3 vColor;
 
@@ -57,7 +57,7 @@
             //vNormal = normalize(normalMatrix * aNormal);
 
             // Transform the normal using the transpose of the inverse of the model matrix
-            mat3 normalMatrix = transpose(inverse(mat3((modelMatrix))));
+            mat4 normalMatrix = transpose(inverse((modelMatrix)));
         
 
 
@@ -78,33 +78,31 @@
 
     <!-- fragment Shader -->
     <script id="fragment-shader" type="x-shader/x-fragment">
-         #version 300 es
-         precision mediump float;
+        #version 300 es
+        precision mediump float;
          
-         in vec3 vbc;
-         in vec3 vNormal;
-         in vec3 vLightDirection;
+        in vec3 vbc;
+        in vec4 vNormal;
+        in vec3 vLightDirection;
 
-         // Color that is the result of this shader
-         out vec4 fragColor;
+        // Color that is the result of this shader
+        out vec4 fragColor;
 
-         void main(void) {
-             
-             fragColor = vec4 (0.5, 0.5, 0.5, 1.0 );
-           // if on the edge, draw black, otherwsie, draw grey
-           //if (vbc.x < 0.01 || vbc.y < 0.01 || vbc.z < 0.01) {
-             //fragColor = vec4 (1.0, 1.0, 1.0, 1.0);
-           //}
-           fragColor = vec4(vNormal, 1.0);
+        void main(void) {
 
+            // Normal test
+            //fragColor = vec4(vNormal, 1.0);
 
-           // Lighting
-           // Calculate the dot product between the normal and light direction
-           float diffuseFactor = max(dot(normalize(vNormal), normalize(vLightDirection)), 0.0);
-       
-           // Set the color based on the dot product
-           fragColor = vec4(0.5 * diffuseFactor, 0.5 * diffuseFactor, 0.5 * diffuseFactor, 1.0);
-         }
+            // Lighting
+            // Calculate the dot product between the normal and light direction
+            float diffuseFactor = max(dot(normalize(vNormal.xyz), normalize(vLightDirection)), 0.0);
+            
+            // Set the color based on the dot product
+            fragColor = vec4(0.5 * diffuseFactor, 0.5 * diffuseFactor, 0.5 * diffuseFactor, 1.0);
+            
+            //fragColor = vNormal;
+
+        }
 
      </script>
 

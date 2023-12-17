@@ -30,7 +30,7 @@ var anglesReset = [0.0, 0.0, 0.0];
 var angles = [0.0, 0.0, 0.0];
 var angleInc = 5.0;
 
-var lightDirection = [-0.8, -0.8, -1.0];
+var lightDirection = [-0.8, -1.5, -1.0];
 
 // Shapes we can draw
 var CUBE = 1;
@@ -43,7 +43,7 @@ var curShape = STAR;
 
 // Camera variables
 // Set up the view matrix (position the camera)
-let eye = [0.0, 0, 5.0];  // Camera position (adjust as needed)
+let eye = [0.0, 0, 7.0];  // Camera position (adjust as needed)
 let center = [0.0, 0.0, 0.0];  // Point the camera is looking at
 let up = [0.0, 1.0, 0.0];  // Up direction of the camera
 
@@ -254,7 +254,7 @@ function createScene() {
   rotateTransformations = [];
   pointsLastIndex = 0;
 
-  makeTree();
+  //makeTree();
   // update last index and previous index
 
   division1 = 1;
@@ -266,12 +266,12 @@ function createScene() {
   //division1 = 5;
   createNewShape(CUBE);
   scalePoints(previousIndex, pointsLastIndex, 2);
-  rotatePointsY(previousIndex, pointsLastIndex, radians(0));
+  rotatePointsY(previousIndex, pointsLastIndex, radians(45));
   translatePoints(previousIndex, pointsLastIndex, 1, 1, 0);
 
   //division1 = 4;
   createNewShape(CUBE);
-  rotatePointsY(previousIndex, pointsLastIndex, radians(45));
+  rotatePointsY(previousIndex, pointsLastIndex, radians(30));
   translatePoints(previousIndex, pointsLastIndex, 0, -1, -.5);
 
 
@@ -298,7 +298,7 @@ function createScene() {
   gl.bindBuffer(gl.ARRAY_BUFFER, myNormalBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
   gl.enableVertexAttribArray(program.aNormal);
-  gl.vertexAttribPointer(program.aNormal, 3, gl.FLOAT, false, 0, 0);
+  gl.vertexAttribPointer(program.aNormal, 4, gl.FLOAT, false, 0, 0);
 
   if (myRotationBuffer == null) myRotationBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, myRotationBuffer);
@@ -333,6 +333,7 @@ function rotatePointsY(startIndex, endIndex, angle) {
 
   for (let i = startIndex; i < endIndex; i += 4) {
     const x = i;
+    const y = i + 1;
     const z = i + 2;
     const xOrig = points[x];
     const zOrig = points[z];
@@ -340,6 +341,16 @@ function rotatePointsY(startIndex, endIndex, angle) {
     console.log(angle);
     points[x] = xOrig * Math.cos(angle) + zOrig * Math.sin(angle);
     points[z] = xOrig * -Math.sin(angle) + zOrig * Math.cos(angle);
+
+      const xNOrig = normals[x];
+    const zNOrig = normals[z];
+    normals[x] = xNOrig * Math.cos(angle) + zNOrig * Math.sin(angle);
+    normals[z] = xNOrig * -Math.sin(angle) + zNOrig * Math.cos(angle);
+
+    var length = Math.sqrt(normals[x] * normals[x] + normals[y] * normals[y] + normals[z] * normals[z]);
+    normals[x] /= length;
+    normals[y] /= length;
+    normals[z] /= length;
   }
 }
 
