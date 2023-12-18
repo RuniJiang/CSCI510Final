@@ -169,11 +169,10 @@ function makeCone(radialdivision, heightdivision, radius, height, color) {
 // on spherical coordinates as described in the video (as opposed to the
 //recursive subdivision method).
 //
-function makeSphere(slices, stacks, color) {
+function makeSphere(slices, stacks, radius, color) {
     // console.log(slices);
     // console.log(stacks);
 
-    let radius = 0.5;
     let phiStep = radians(180 / stacks);
     let thetaStep = radians(360 / slices);
     for (let i = 0; i < stacks; i++) {
@@ -202,8 +201,8 @@ function makeSphere(slices, stacks, color) {
             let y3 = radius * Math.sin(lat1) * Math.sin(long1);
             let z3 = radius * Math.cos(lat1);
 
-            addTriangle(x0, z0, y0, x2, z2, y2, x1, z1, y1, color);     // the z is the up for the sphere coordinator
-            addTriangle(x1, z1, y1, x2, z2, y2, x3, z3, y3, color);
+            addTriangle(x2, z2, y2, x0, z0, y0, x1, z1, y1, color);     // the z is the up for the sphere coordinator
+            addTriangle(x2, z2, y2, x1, z1, y1, x3, z3, y3, color);
 
         }
     }
@@ -222,25 +221,25 @@ function makeStar(numPoints, color) {
 
 
         const centerX = 0;
-        let starPointX = outerRadius * Math.cos(angle);
-        let rightCornerX = innerRadius * Math.cos(angle + angleStep);
-        let leftCornerX = innerRadius * Math.cos(angle - angleStep);
+        let starPointX = outerRadius * Math.sin(angle);
+        let rightCornerX = innerRadius * Math.sin(angle + angleStep);
+        let leftCornerX = innerRadius * Math.sin(angle - angleStep);
 
         const centerY = 0;
-        let starPointY = outerRadius * Math.sin(angle);
-        let rightCornerY = innerRadius * Math.sin(angle + angleStep);
-        let leftCornerY = innerRadius * Math.sin(angle - angleStep);
+        let starPointY = outerRadius * Math.cos(angle);
+        let rightCornerY = innerRadius * Math.cos(angle + angleStep);
+        let leftCornerY = innerRadius * Math.cos(angle - angleStep);
 
         // front right half of point (triangles drawn counter-clockwise)
-        addTriangle(rightCornerX, rightCornerY, centerZ, centerX, centerY, outZ, starPointX, starPointY, centerZ, color);
+        addTriangle(centerX, centerY, outZ, rightCornerX, rightCornerY, centerZ, starPointX, starPointY, centerZ, color);
         // front left half of point
-        addTriangle(starPointX, starPointY, centerZ, centerX, centerY, outZ, leftCornerX, leftCornerY, centerZ, color);
+        addTriangle(centerX, centerY, outZ, starPointX, starPointY, centerZ, leftCornerX, leftCornerY, centerZ, color);
 
         outZ = -outZ;
         // back right half of point (triangles drawn counter-clockwise)
-        addTriangle(starPointX, starPointY, centerZ, centerX, centerY, outZ, rightCornerX, rightCornerY, centerZ, color);
+        addTriangle(centerX, centerY, outZ, starPointX, starPointY, centerZ, rightCornerX, rightCornerY, centerZ, color);
         // back left half of point
-        addTriangle(leftCornerX, leftCornerY, centerZ, centerX, centerY, outZ, starPointX, starPointY, centerZ, color);
+        addTriangle(centerX, centerY, outZ, leftCornerX, leftCornerY, centerZ, starPointX, starPointY, centerZ, color);
 
 
 

@@ -237,7 +237,7 @@ function makeTree(green) {
   tempLast = points.length;
   translatePoints(tempPrev, tempLast, 0, -.8, 0);
 
-  makeCylinder(50, 1, .4, .5, brown);
+  makeCylinder(20, 1, .4, .5, brown);
   tempPrev = tempLast;
   tempLast = points.length;
   translatePoints(tempPrev, tempLast, 0, -1.8, 0);
@@ -246,17 +246,193 @@ function makeTree(green) {
   pointsLastIndex = points.length;
 }
 
-function makeDoubleArches(archRadius1, height1, archRadius2, height2) {
-  // draw gold arches
-  //247, 222, 134
-  let gold = [255 / 255, 222 / 255, 102 / 255];
+function makeTreeOrnaments(color1, color2, color3, color4) {
+  color1 = color1 || [245 / 255, 135 / 235, 225 / 255];
+  color2 = color2 || [1.0, 1.0, 1.0];
+  color3 = color3 || [255 / 255, 222 / 255, 102 / 255];
+  color4 = color4 || [108 / 255, 220 / 255, 245 / 255]
+  let sphereDivision = 8;
 
-  makeArch(20, 20, 0.06, archRadius1, height1, gold);
+  let large = .1;
+  let medium = .07;
+  let small = .05;
+
+  makeSphere(sphereDivision, sphereDivision, medium, color1);
+  let tempPrev = pointsLastIndex;
+  let tempLast = points.length;
+  translatePoints(tempPrev, tempLast, 0, .4, .25);
+
+
+  /////FRONT SIDE///
+  //TOP OF TREE
+  makeSphere(sphereDivision, sphereDivision, small, color4);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, -.36, .2, 0);
+
+  makeSphere(sphereDivision, sphereDivision, small, color3);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, .2, .1, .35);
+
+  makeSphere(sphereDivision, sphereDivision, large, color2);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, .35, -.2, 0.23);
+
+  //MIDDLE OF TREE
+  makeSphere(sphereDivision, sphereDivision, small, color3);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, -.37, -.3, 0.23);
+
+  makeSphere(sphereDivision, sphereDivision, large, color1);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, -.2, -.5, 0.5);
+
+  makeSphere(sphereDivision, sphereDivision, medium, color1);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, .6, -.57, 0);
+
+  makeSphere(sphereDivision, sphereDivision, medium, color4);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, .3, -.65, 0.6);
+
+  //BOTTOM OF TREE
+  makeSphere(sphereDivision, sphereDivision, large, color2);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, -.5, -1, 0.3);
+
+  makeSphere(sphereDivision, sphereDivision, small, color1);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, .26, -1.02, 0.54);
+
+  makeSphere(sphereDivision, sphereDivision, medium, color3);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, .6, -1.01, 0.2);
+
+  makeSphere(sphereDivision, sphereDivision, medium, color3);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, -.2, -1.2, 0.71);
+
+  makeSphere(sphereDivision, sphereDivision, large, color2);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, .55, -1.3, 0.55);
+
+  makeSphere(sphereDivision, sphereDivision, large, color4);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, -.65, -1.45, 0.6);
+
+
+  /////BACK SIDE///
+  //TOP OF TREE
+  makeSphere(sphereDivision, sphereDivision, medium, color1);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, 0, .4, .25);
+  rotatePointsY(tempPrev, tempLast, 160);
+
+  makeSphere(sphereDivision, sphereDivision, small, color4);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, -.36, .2, 0);
+  rotatePointsY(tempPrev, tempLast, 160);
+
+  makeSphere(sphereDivision, sphereDivision, small, color3);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, .2, .1, .35);
+  rotatePointsY(tempPrev, tempLast, 160);
+
+  makeSphere(sphereDivision, sphereDivision, large, color2);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, .35, -.2, 0.23);
+  rotatePointsY(tempPrev, tempLast, 160);
+
+  //MIDDLE OF TREE
+  makeSphere(sphereDivision, sphereDivision, small, color3);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, -.37, -.3, 0.23);
+  rotatePointsY(tempPrev, tempLast, 160);
+
+  makeSphere(sphereDivision, sphereDivision, large, color1);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, -.2, -.5, 0.5);
+  rotatePointsY(tempPrev, tempLast, 160);
+
+  makeSphere(sphereDivision, sphereDivision, medium, color1);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, .6, -.57, 0);
+  rotatePointsY(tempPrev, tempLast, 160);
+
+  makeSphere(sphereDivision, sphereDivision, medium, color4);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, .3, -.65, 0.6);
+  rotatePointsY(tempPrev, tempLast, 160);
+
+  //BOTTOM OF TREE
+  makeSphere(sphereDivision, sphereDivision, large, color2);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, -.5, -1, 0.3);
+  rotatePointsY(tempPrev, tempLast, 160);
+
+  makeSphere(sphereDivision, sphereDivision, small, color1);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, .26, -1.02, 0.54);
+  rotatePointsY(tempPrev, tempLast, 160);
+
+  makeSphere(sphereDivision, sphereDivision, medium, color3);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, .6, -1.01, 0.2);
+  rotatePointsY(tempPrev, tempLast, 160);
+
+  makeSphere(sphereDivision, sphereDivision, medium, color3);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, -.2, -1.2, 0.71);
+  rotatePointsY(tempPrev, tempLast, 160);
+
+  makeSphere(sphereDivision, sphereDivision, large, color2);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, .55, -1.3, 0.55);
+  rotatePointsY(tempPrev, tempLast, 160);
+
+  makeSphere(sphereDivision, sphereDivision, large, color4);
+  tempPrev = tempLast;
+  tempLast = points.length;
+  translatePoints(tempPrev, tempLast, -.65, -1.45, 0.6);
+  rotatePointsY(tempPrev, tempLast, 160);
+
+  previousIndex = pointsLastIndex;
+  pointsLastIndex = points.length;
+}
+
+function makeDoubleArches(archRadius1, height1, archRadius2, height2, gold) {
+
+  makeArch(15, 20, 0.05, archRadius1, height1, gold);
   let tempPrev = pointsLastIndex;
   let tempLast = points.length;
   translatePoints(tempPrev, tempLast, 0, -.8, 0);
 
-  makeArch(20, 20, 0.06, archRadius2, height2, gold);
+  makeArch(15, 20, 0.05, archRadius2, height2, gold);
   tempPrev = tempLast;
   tempLast = points.length;
   translatePoints(tempPrev, tempLast, 0, -1, 0);
@@ -278,6 +454,14 @@ function createScene() {
   pointsLastIndex = 0;
 
 
+  // draw gold arches
+  //247, 222, 134
+  let gold = [255 / 255, 222 / 255, 102 / 255];
+
+  //255, 251, 0
+  let gold2 = [255 / 255, 243 / 255, 115 / 255];
+
+
   //make base
   //division1 = 5;
   createNewShape(CUBE, [155 / 255, 208 / 255, 209 / 255]);
@@ -287,27 +471,64 @@ function createScene() {
   let baseIndexEnd = pointsLastIndex;
 
   makeTree();
-  scalePoints(previousIndex, pointsLastIndex, .9, .9, .9);
-  translatePoints(previousIndex, pointsLastIndex, -1.2, 0, 1.8);
+  scalePoints(previousIndex, pointsLastIndex, .95, .95, .95);
+  translatePoints(previousIndex, pointsLastIndex, -1.2, -.1, 1.8);
+
+  makeTreeOrnaments([207 / 255, 6 / 255, 6 / 255]);
+  rotatePointsY(previousIndex, pointsLastIndex, radians(0));
+  scalePoints(previousIndex, pointsLastIndex, .95, .95, .95);
+  translatePoints(previousIndex, pointsLastIndex, -1.2, -.1, 1.8);
+
+  makeStar(5, gold2);
+  previousIndex = pointsLastIndex;
+  pointsLastIndex = points.length;
+  scalePoints(previousIndex, pointsLastIndex, .5, .5, .5);
+  translatePoints(previousIndex, pointsLastIndex, -1.2, .8, 1.8);
+
 
   makeTree();
   scalePoints(previousIndex, pointsLastIndex, 1.5, 1.4, 1.5);
   translatePoints(previousIndex, pointsLastIndex, .5, .8, -1.8);
 
+  makeTreeOrnaments();
+  rotatePointsY(previousIndex, pointsLastIndex, radians(-50));
+  scalePoints(previousIndex, pointsLastIndex, 1.5, 1.4, 1.5);
+  translatePoints(previousIndex, pointsLastIndex, .5, .8, -1.8);
+
+  makeStar(5, gold2);
+  previousIndex = pointsLastIndex;
+  pointsLastIndex = points.length;
+  scalePoints(previousIndex, pointsLastIndex, .8, .8, .8);
+  translatePoints(previousIndex, pointsLastIndex, .5, 2.15, -1.8);
+
+
   makeTree();
   scalePoints(previousIndex, pointsLastIndex, .9, .9, .9);
   translatePoints(previousIndex, pointsLastIndex, 1.5, -.2, 1);
 
+  makeTreeOrnaments();
+  rotatePointsY(previousIndex, pointsLastIndex, radians(50));
+  scalePoints(previousIndex, pointsLastIndex, .9, .9, .9);
+  translatePoints(previousIndex, pointsLastIndex, 1.5, -.2, 1);
 
-  makeDoubleArches(1, 1.1, .75, 1.3);
+  makeStar(5, gold2);
+  previousIndex = pointsLastIndex;
+  pointsLastIndex = points.length;
+  scalePoints(previousIndex, pointsLastIndex, .5, .5, .5);
+  translatePoints(previousIndex, pointsLastIndex, 1.5, .65, 1);
+
+
+  makeDoubleArches(1, 1.3, .75, 1.5, gold);
   rotatePointsY(previousIndex, pointsLastIndex, radians(40));
-  translatePoints(previousIndex, pointsLastIndex, -1.3, 0, .5);
+  translatePoints(previousIndex, pointsLastIndex, -1.3, -.2, .5);
 
 
-  makeDoubleArches(.9, 1.7, .65, 1.9);
+  makeDoubleArches(.9, 1.7, .65, 1.9, gold);
   //scalePoints(previousIndex, pointsLastIndex, 1.1, 1.1, 1.1);
   rotatePointsY(previousIndex, pointsLastIndex, radians(-20));
   translatePoints(previousIndex, pointsLastIndex, 1.9, 0, 0);
+
+
 
 
   rotatePointsY(baseIndexEnd, pointsLastIndex, radians(-5));
