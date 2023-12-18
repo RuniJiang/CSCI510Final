@@ -8,9 +8,10 @@
     <script id="vertex-shader" type="x-shader/x-vertex">
         #version 300 es
         in vec4 aVertexPosition;
-        in vec3 bary;
         in vec4 aNormal;
+        in vec3 bary;
         in vec3 aColor;
+        in vec2 aVertexTextureCoords;
 
         uniform vec3 theta;
         uniform mat4 uProjectionMatrix;
@@ -21,6 +22,7 @@
         out vec4 vNormal;
         out vec3 vLightDirection;
         out vec3 vColor;
+        out vec2 vTextureCoords;
 
         void main()
         {
@@ -63,6 +65,7 @@
             vColor = aColor;
 
             vLightDirection = -normalize(uViewMatrix * vec4(uLightDirection, 0.0)).xyz;
+            vTextureCoords = aVertexTextureCoords;
         }
     </script>
 
@@ -71,10 +74,14 @@
         #version 300 es
         precision mediump float;
          
-         in vec3 vbc;
-         in vec4 vNormal;
-         in vec3 vLightDirection;
-         in vec3 vColor;
+        
+        uniform sampler2D uSampler;
+
+        in vec3 vbc;
+        in vec4 vNormal;
+        in vec3 vLightDirection;
+        in vec3 vColor;
+        in vec2 vTextureCoords;
 
         // Color that is the result of this shader
         out vec4 fragColor;
@@ -83,14 +90,16 @@
 
             // Normal test
             //fragColor = vec4(vNormal, 1.0);
-
+            
            // Lighting
            // Calculate the dot product between the normal and light direction
             float diffuseFactor = max(dot(normalize(vNormal.xyz), normalize(vLightDirection)), 0.0);
        
            // Set the color based on the dot product
            fragColor = vec4(vColor.x * diffuseFactor, vColor.y * diffuseFactor, vColor.z * diffuseFactor, 1.0);
-         }
+
+           fragColor = texture(uSampler, vTextureCoords);
+        }
 
      </script>
 
@@ -109,7 +118,7 @@
         function gotKey(event) {
 
             var key = event.key;
-            console.log(key);
+            //console.log(key);
             // ArrowUp, ArrowDown, ArrowLeft, ArrowRight
 
             //  incremental rotation

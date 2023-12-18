@@ -1,3 +1,4 @@
+
 //
 // fill in code that creates the triangles for a cube with dimensions 1x1x1
 // on each side (and the origin in the center of the cube). with an equal
@@ -25,7 +26,36 @@ function makeCube(subdivisions, color) {
 
             // Front face
             addTriangle(a0, b0, 0.5, a2, b2, 0.5, a1, b1, 0.5, color);
+            // note that the uv's define the vertex point extents for the texturing
+            // so min is 0.0 and the max extent is 1.0
+            uvs.push(0.0);
+            uvs.push(0.0);
+
+            uvs.push(0.0);
+            uvs.push(1.0);
+
+            uvs.push(1.0);
+            uvs.push(0.0);
+            // uvs.push(0.0);
+            // uvs.push(1.0);
+            // uvs.push(0.0);
+            // uvs.push(0.0);
+            // uvs.push(1.0);
+            // uvs.push(1.0);
+
             addTriangle(a2, b2, 0.5, a3, b3, 0.5, a1, b1, 0.5, color);
+            uvs.push(0.0);
+            uvs.push(1.0);
+            uvs.push(1.0);
+            uvs.push(1.0);
+            uvs.push(1.0);
+            uvs.push(0.0);
+            // uvs.push(0.0);
+            // uvs.push(0.0);
+            // uvs.push(1.0);
+            // uvs.push(0.0);
+            // uvs.push(1.0);
+            // uvs.push(1.0);
 
             // Back face 
             addTriangle(a0, b0, -0.5, a1, b1, -0.5, a2, b2, -0.5, color);
@@ -41,8 +71,20 @@ function makeCube(subdivisions, color) {
 
             // Top face
             addTriangle(a0, 0.5, b0, a1, 0.5, b1, a2, 0.5, b2, color);
+            uvs.push(0.0);
+            uvs.push(1.0);
+            uvs.push(0.0);
+            uvs.push(0.0);
+            uvs.push(1.0);
+            uvs.push(0.0);
             addTriangle(a2, 0.5, b2, a1, 0.5, b1, a3, 0.5, b3, color);
-
+            uvs.push(0.0);
+            uvs.push(1.0);
+            uvs.push(1.0);
+            uvs.push(0.0);
+            uvs.push(1.0);
+            uvs.push(1.0);
+            
             // // Bottom face 
             addTriangle(a0, -0.5, b0, a2, -0.5, b2, a1, -0.5, b1, color);
             addTriangle(a2, -0.5, b2, a3, -0.5, b3, a1, -0.5, b1, color);

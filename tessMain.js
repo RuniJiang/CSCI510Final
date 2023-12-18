@@ -5,6 +5,8 @@
 let gl,
   program,
   points,
+  texture,
+  uvs,
   pointsLastIndex,
   previousIndex,
   bary,
@@ -21,6 +23,7 @@ var myBaryBuffer = null;
 var myNormalBuffer = null;
 var myColorBuffer = null;
 var myIndexBuffer = null;
+var myUVBuffer = null;
 
 // Other globals with default values;
 var division1 = 3;
@@ -105,6 +108,37 @@ function initProgram() {
   program.aColor = gl.getAttribLocation(program, 'aColor');
   program.uTheta = gl.getUniformLocation(program, 'theta');
   program.uLightDir = gl.getUniformLocation(program, 'uLightDirection');
+   // set up texture location info
+   program.aVertexTextureCoords = gl.getAttribLocation(program, 'aVertexTextureCoords');
+   program.uSampler = gl.getUniformLocation(program, 'uSampler');
+  
+
+   // set up texture and image load and value
+   texture = gl.createTexture();
+   const image = new Image();
+
+ // this approach can be used to load multiple files - just note it's async and needs
+ // to call whatever happens after the files get loaded
+ // you can load them into an array and use promises if you want as well
+ // just look up using promises
+(async () => { 
+    image.src = 'webgl.png'; // note: file in same dir as other files for program
+    await image.decode();
+    // img is ready to use: this console write is left here to help
+    // others with potential debugging when changing this function
+    console.log(`width: ${image.width}, height: ${image.height}`);
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.bindTexture(gl.TEXTURE_2D, null);
+    // // create and bind your current object
+    // createNewShape();
+    // // do a draw
+    // draw();
+   })();
+
+  
 }
 
 
@@ -150,6 +184,10 @@ function draw() {
   gl.bindVertexArray(myVAO);
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, myIndexBuffer);
 
+  // bind the texture
+  gl.activeTexture(gl.TEXTURE0);
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.uniform1i(program.uSampler, 0);
 
   // Draw to the scene using triangle primitives
   gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
@@ -451,6 +489,7 @@ function createScene() {
   bary = [];
   normals = [];
   colors = [];
+  uvs = [];
   pointsLastIndex = 0;
 
 
@@ -463,7 +502,7 @@ function createScene() {
 
 
   //make base
-  //division1 = 5;
+  division1 = 1;
   createNewShape(CUBE, [155 / 255, 208 / 255, 209 / 255]);
   scalePoints(previousIndex, pointsLastIndex, 10, 5, 10);
   translatePoints(previousIndex, pointsLastIndex, 0, -4.5, 0);
@@ -573,6 +612,22 @@ function createScene() {
   gl.enableVertexAttribArray(program.aBary);
   gl.vertexAttribPointer(program.aBary, 3, gl.FLOAT, false, 0, 0);
 
+    // create and bind vertex buffer
+    if (myVertexBuffer == null) myVertexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, myVertexBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(points), gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(program.aVertexPosition);
+    gl.vertexAttribPointer(program.aVertexPosition, 4, gl.FLOAT, false, 0, 0);
+    
+    // create and bind uv buffer
+    if (myUVBuffer == null) myUVBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, myUVBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvs), gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(program.aVertexTextureCoords);
+    // note that texture uv's are 2d, which is why there's a 2 below
+    gl.vertexAttribPointer(program.aVertexTextureCoords, 2, gl.FLOAT, false, 0, 0);
+
+
   // Bind normal buffer
   if (myNormalBuffer == null) myNormalBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, myNormalBuffer);
@@ -603,7 +658,6 @@ function createScene() {
 
   // indicate a redraw is required.
   updateDisplay = true;
-
 }
 
 function rotatePointsY(startIndex, endIndex, angle) {
