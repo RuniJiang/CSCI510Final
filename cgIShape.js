@@ -29,65 +29,98 @@ function makeCube(subdivisions, color) {
             // note that the uv's define the vertex point extents for the texturing
             // so min is 0.0 and the max extent is 1.0
             uvs.push(0.0);
-            uvs.push(0.0);
-
-            uvs.push(0.0);
-            uvs.push(1.0);
-
             uvs.push(1.0);
             uvs.push(0.0);
-            // uvs.push(0.0);
-            // uvs.push(1.0);
-            // uvs.push(0.0);
-            // uvs.push(0.0);
-            // uvs.push(1.0);
-            // uvs.push(1.0);
-
+            uvs.push(0.0);
+            uvs.push(1.0);
+            uvs.push(1.0);
             addTriangle(a2, b2, 0.5, a3, b3, 0.5, a1, b1, 0.5, color);
             uvs.push(0.0);
-            uvs.push(1.0);
-            uvs.push(1.0);
-            uvs.push(1.0);
+            uvs.push(0.0);
             uvs.push(1.0);
             uvs.push(0.0);
-            // uvs.push(0.0);
-            // uvs.push(0.0);
-            // uvs.push(1.0);
-            // uvs.push(0.0);
-            // uvs.push(1.0);
-            // uvs.push(1.0);
+            uvs.push(1.0);
+            uvs.push(1.0);
 
             // Back face 
             addTriangle(a0, b0, -0.5, a1, b1, -0.5, a2, b2, -0.5, color);
+            uvs.push(0.0);
+            uvs.push(1.0);
+            uvs.push(1.0);
+            uvs.push(1.0);
+            uvs.push(1.0);
+            uvs.push(0.0);
             addTriangle(a2, b2, -0.5, a1, b1, -0.5, a3, b3, -0.5, color);
+            uvs.push(0.0);
+            uvs.push(1.0);
+            uvs.push(0.0);
+            uvs.push(0.0);
+            uvs.push(1.0);
+            uvs.push(0.0);
 
-            // Right face
-            addTriangle(0.5, a0, b0, 0.5, a2, b2, 0.5, a1, b1, color);
-            addTriangle(0.5, a2, b2, 0.5, a3, b3, 0.5, a1, b1, color);
+        //     // Right face
+        //     addTriangle(0.5, a0, b0, 0.5, a2, b2, 0.5, a1, b1, color);
+        //     uvs.push(0.0);
+        //     uvs.push(1.0);
+        //     uvs.push(0.0);
+        //     uvs.push(0.0);
+        //     uvs.push(1.0);
+        //     uvs.push(1.0);
+        //     addTriangle(0.5, a2, b2, 0.5, a3, b3, 0.5, a1, b1, color);
+        //     uvs.push(0.0);
+        //     uvs.push(0.0);
+        //     uvs.push(1.0);
+        //     uvs.push(0.0);
+        //     uvs.push(1.0);
+        //     uvs.push(1.0);
 
-            // Left face 
-            addTriangle(-0.5, a0, b0, -0.5, a1, b1, -0.5, a2, b2, color);
-            addTriangle(-0.5, a2, b2, -0.5, a1, b1, -0.5, a3, b3, color);
+        //     // Left face 
+        //     addTriangle(-0.5, a0, b0, -0.5, a1, b1, -0.5, a2, b2, color);
+        //     uvs.push(0.0);
+        //     uvs.push(1.0);
+        //     uvs.push(0.0);
+        //     uvs.push(0.0);
+        //     uvs.push(1.0);
+        //     uvs.push(1.0);
+        //     addTriangle(-0.5, a2, b2, -0.5, a1, b1, -0.5, a3, b3, color);
+        //     uvs.push(0.0);
+        //     uvs.push(0.0);
+        //     uvs.push(1.0);
+        //     uvs.push(0.0);
+        //     uvs.push(1.0);
+        //     uvs.push(1.0);
 
-            // Top face
-            addTriangle(a0, 0.5, b0, a1, 0.5, b1, a2, 0.5, b2, color);
-            uvs.push(0.0);
-            uvs.push(1.0);
-            uvs.push(0.0);
-            uvs.push(0.0);
-            uvs.push(1.0);
-            uvs.push(0.0);
-            addTriangle(a2, 0.5, b2, a1, 0.5, b1, a3, 0.5, b3, color);
-            uvs.push(0.0);
-            uvs.push(1.0);
-            uvs.push(1.0);
-            uvs.push(0.0);
-            uvs.push(1.0);
-            uvs.push(1.0);
+        //     // Top face
+        //     addTriangle(a0, 0.5, b0, a1, 0.5, b1, a2, 0.5, b2, color);
+        //     uvs.push(0.0);
+        //     uvs.push(1.0);
+        //     uvs.push(0.0);
+        //     uvs.push(0.0);
+        //     uvs.push(1.0);
+        //     uvs.push(0.0);
+        //     addTriangle(a2, 0.5, b2, a1, 0.5, b1, a3, 0.5, b3, color);
+        //     uvs.push(0.0);
+        //     uvs.push(1.0);
+        //     uvs.push(1.0);
+        //     uvs.push(0.0);
+        //     uvs.push(1.0);
+        //     uvs.push(1.0);
             
-            // // Bottom face 
-            addTriangle(a0, -0.5, b0, a2, -0.5, b2, a1, -0.5, b1, color);
-            addTriangle(a2, -0.5, b2, a3, -0.5, b3, a1, -0.5, b1, color);
+        //     // // Bottom face 
+        //     addTriangle(a0, -0.5, b0, a2, -0.5, b2, a1, -0.5, b1, color);
+        //     uvs.push(0.0);
+        //     uvs.push(1.0);
+        //     uvs.push(0.0);
+        //     uvs.push(0.0);
+        //     uvs.push(1.0);
+        //     uvs.push(0.0);
+        //     addTriangle(a2, -0.5, b2, a3, -0.5, b3, a1, -0.5, b1, color);
+        //     uvs.push(0.0);
+        //     uvs.push(1.0);
+        //     uvs.push(1.0);
+        //     uvs.push(0.0);
+        //     uvs.push(1.0);
+        //     uvs.push(1.0);
         }
 
 

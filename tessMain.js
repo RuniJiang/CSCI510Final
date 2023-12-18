@@ -218,6 +218,7 @@ function init() {
   // some GL initialization
   gl.enable(gl.DEPTH_TEST);
   gl.enable(gl.CULL_FACE);
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
   gl.cullFace(gl.BACK);
   gl.frontFace(gl.CCW);
