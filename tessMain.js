@@ -209,13 +209,6 @@ function draw() {
     // Draw to the scene using triangle primitives
     gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, textureIndexStart * shortByte + i*36 * shortByte);
   }
-
-  // gl.activeTexture(gl.TEXTURE0);
-  // gl.bindTexture(gl.TEXTURE_2D, textures[1]);
-  // gl.uniform1i(program.uSampler, 0);
-
-  // // Draw to the scene using triangle primitives
-  // gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, textureIndexStart * 2);
   
   
 
