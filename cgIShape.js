@@ -315,9 +315,6 @@ function makeStar(numPoints, color) {
         addTriangle(centerX, centerY, outZ, starPointX, starPointY, centerZ, rightCornerX, rightCornerY, centerZ, color);
         // back left half of point
         addTriangle(centerX, centerY, outZ, leftCornerX, leftCornerY, centerZ, starPointX, starPointY, centerZ, color);
-
-
-
     }
 }
 
