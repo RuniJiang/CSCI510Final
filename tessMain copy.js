@@ -5,7 +5,6 @@
 let gl,
   program,
   texturedProgram,
-  currentShaderProgram,
   points,
   texture,
   uvs,
@@ -85,7 +84,7 @@ function getShader(id) {
   return shader;
 }
 
-function initTexturedProgram() {
+function initTexturedProgram(){
   const vertexShader = getShader('vertex-shader');
   const fragmentShader = getShader('fragment-shader-Textured');
 
@@ -110,21 +109,21 @@ function initTexturedProgram() {
   texturedProgram.aColor = gl.getAttribLocation(texturedProgram, 'aColor');
   texturedProgram.uTheta = gl.getUniformLocation(texturedProgram, 'theta');
   texturedProgram.uLightDir = gl.getUniformLocation(texturedProgram, 'uLightDirection');
-  // set up texture location info
-  texturedProgram.aVertexTextureCoords = gl.getAttribLocation(texturedProgram, 'aVertexTextureCoords');
-  texturedProgram.uSampler = gl.getUniformLocation(texturedProgram, 'uSampler');
+   // set up texture location info
+   texturedProgram.aVertexTextureCoords = gl.getAttribLocation(texturedProgram, 'aVertexTextureCoords');
+   texturedProgram.uSampler = gl.getUniformLocation(texturedProgram, 'uSampler');
+  
 
+   // set up texture and image load and value
+   texture = gl.createTexture();
+   const image = new Image();
 
-  // set up texture and image load and value
-  texture = gl.createTexture();
-  const image = new Image();
-
-  // this approach can be used to load multiple files - just note it's async and needs
-  // to call whatever happens after the files get loaded
-  // you can load them into an array and use promises if you want as well
-  // just look up using promises
-  (async () => {
-    image.src = 'Textures/giftGreen.jpg'; // note: file in same dir as other files for program
+ // this approach can be used to load multiple files - just note it's async and needs
+ // to call whatever happens after the files get loaded
+ // you can load them into an array and use promises if you want as well
+ // just look up using promises
+(async () => { 
+    image.src = 'webgl.png'; // note: file in same dir as other files for program
     await image.decode();
     // img is ready to use: this console write is left here to help
     // others with potential debugging when changing this function
@@ -137,8 +136,8 @@ function initTexturedProgram() {
     // // create and bind your current object
     // createNewShape();
     // // do a draw
-    draw();
-  })();
+    // draw();
+   })();
 
 }
 
@@ -171,7 +170,7 @@ function initProgram() {
   //  // set up texture location info
   //  program.aVertexTextureCoords = gl.getAttribLocation(program, 'aVertexTextureCoords');
   //  program.uSampler = gl.getUniformLocation(program, 'uSampler');
-
+  
 }
 
 
@@ -217,10 +216,10 @@ function draw() {
   gl.bindVertexArray(myVAO);
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, myIndexBuffer);
 
-  //bind the texture
-  gl.activeTexture(gl.TEXTURE0);
-  gl.bindTexture(gl.TEXTURE_2D, texture);
-  gl.uniform1i(texturedProgram.uSampler, 0);
+  // bind the texture
+  // gl.activeTexture(gl.TEXTURE0);
+  // gl.bindTexture(gl.TEXTURE_2D, texture);
+  // gl.uniform1i(program.uSampler, 0);
 
   // Draw to the scene using triangle primitives
   gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
@@ -261,9 +260,7 @@ function init() {
 
   // Read, compile, and link your shaders
   initProgram();
-  initTexturedProgram();
-
-  currentShaderProgram = texturedProgram;
+  //initTexturedProgram();
 
   // Set up the projection matrix (example using perspective projection)
   const fov = 45 * Math.PI / 180;
@@ -274,13 +271,13 @@ function init() {
   mat4.perspective(projectionMatrix, fov, aspect, zNear, zFar);
 
   // Pass the projection matrix to the shader
-  const projectionMatrixLocation = gl.getUniformLocation(texturedProgram, 'uProjectionMatrix');
+  const projectionMatrixLocation = gl.getUniformLocation(program, 'uProjectionMatrix');
   gl.uniformMatrix4fv(projectionMatrixLocation, false, projectionMatrix);
 
   const viewMatrix = mat4.create();
   mat4.lookAt(viewMatrix, eye, center, up);
 
-  const viewMatrixLocation = gl.getUniformLocation(texturedProgram, 'uViewMatrix');
+  const viewMatrixLocation = gl.getUniformLocation(program, 'uViewMatrix');
   gl.uniformMatrix4fv(viewMatrixLocation, false, viewMatrix);
 
 
@@ -295,27 +292,18 @@ function init() {
 
 
 function makeTree(green) {
-
-  //147, 235, 96
-  //176 / 255, 222 / 235, 162 / 255 old green
-  green = green || [168 / 255, 224 / 255, 135 / 255];
+  green = green || [176 / 255, 222 / 235, 162 / 255];
   let brown = [99 / 255, 66 / 255, 5 / 255];
   makeCone(50, 1, 0.5, 1, green);
   let tempPrev = pointsLastIndex;
   let tempLast = points.length;
   translatePoints(tempPrev, tempLast, 0, .4, 0);
 
-  green[0] += -.13;
-  green[1] += -.13;
-  green[2] += -.13;
   makeCone(50, 1, 0.75, 1.3, green);
   tempPrev = tempLast;
   tempLast = points.length;
   translatePoints(tempPrev, tempLast, 0, -.2, 0);
 
-  green[0] += -.13;
-  green[1] += -.13;
-  green[2] += -.13;
   makeCone(50, 1, .95, 1.5, green);
   tempPrev = tempLast;
   tempLast = points.length;
@@ -555,13 +543,11 @@ function createScene() {
 
   let baseIndexEnd = pointsLastIndex;
 
-  //207, 235, 190
-  //189 / 255, 235 / 255, 162 / 255
-  makeTree([193 / 255, 237 / 255, 166 / 255]);
+  makeTree();
   scalePoints(previousIndex, pointsLastIndex, .95, .95, .95);
   translatePoints(previousIndex, pointsLastIndex, -1.2, -.1, 1.8);
 
-  makeTreeOrnaments([219 / 255, 68 / 255, 68 / 255]);
+  makeTreeOrnaments([207 / 255, 6 / 255, 6 / 255]);
   rotatePointsY(previousIndex, pointsLastIndex, radians(0));
   scalePoints(previousIndex, pointsLastIndex, .95, .95, .95);
   translatePoints(previousIndex, pointsLastIndex, -1.2, -.1, 1.8);
@@ -621,6 +607,7 @@ function createScene() {
   rotatePointsY(baseIndexEnd, pointsLastIndex, radians(-5));
 
   // update last index and previous index
+
   /*
   division1 = 1;
   createNewShape(CUBE);
@@ -649,49 +636,49 @@ function createScene() {
   if (myVertexBuffer == null) myVertexBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, myVertexBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(points), gl.STATIC_DRAW);
-  gl.enableVertexAttribArray(texturedProgram.aVertexPosition);
-  gl.vertexAttribPointer(texturedProgram.aVertexPosition, 4, gl.FLOAT, false, 0, 0);
+  gl.enableVertexAttribArray(program.aVertexPosition);
+  gl.vertexAttribPointer(program.aVertexPosition, 4, gl.FLOAT, false, 0, 0);
 
   // create and bind bary buffer
   if (myBaryBuffer == null) myBaryBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, myBaryBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(bary), gl.STATIC_DRAW);
-  gl.enableVertexAttribArray(texturedProgram.aBary);
-  gl.vertexAttribPointer(texturedProgram.aBary, 3, gl.FLOAT, false, 0, 0);
+  gl.enableVertexAttribArray(program.aBary);
+  gl.vertexAttribPointer(program.aBary, 3, gl.FLOAT, false, 0, 0);
 
-  // create and bind vertex buffer
-  if (myVertexBuffer == null) myVertexBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, myVertexBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(points), gl.STATIC_DRAW);
-  gl.enableVertexAttribArray(texturedProgram.aVertexPosition);
-  gl.vertexAttribPointer(texturedProgram.aVertexPosition, 4, gl.FLOAT, false, 0, 0);
-
-  // create and bind uv buffer
-  if (myUVBuffer == null) myUVBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, myUVBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvs), gl.STATIC_DRAW);
-  gl.enableVertexAttribArray(texturedProgram.aVertexTextureCoords);
-  // note that texture uv's are 2d, which is why there's a 2 below
-  gl.vertexAttribPointer(texturedProgram.aVertexTextureCoords, 2, gl.FLOAT, false, 0, 0);
+    // create and bind vertex buffer
+    if (myVertexBuffer == null) myVertexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, myVertexBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(points), gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(program.aVertexPosition);
+    gl.vertexAttribPointer(program.aVertexPosition, 4, gl.FLOAT, false, 0, 0);
+    
+    // // create and bind uv buffer
+    // if (myUVBuffer == null) myUVBuffer = gl.createBuffer();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, myUVBuffer);
+    // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvs), gl.STATIC_DRAW);
+    // gl.enableVertexAttribArray(program.aVertexTextureCoords);
+    // // note that texture uv's are 2d, which is why there's a 2 below
+    // gl.vertexAttribPointer(program.aVertexTextureCoords, 2, gl.FLOAT, false, 0, 0);
 
 
   // Bind normal buffer
   if (myNormalBuffer == null) myNormalBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, myNormalBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
-  gl.enableVertexAttribArray(texturedProgram.aNormal);
-  gl.vertexAttribPointer(texturedProgram.aNormal, 4, gl.FLOAT, false, 0, 0);
+  gl.enableVertexAttribArray(program.aNormal);
+  gl.vertexAttribPointer(program.aNormal, 4, gl.FLOAT, false, 0, 0);
 
   // Bind normal buffer
   if (myColorBuffer == null) myColorBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, myColorBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
-  gl.enableVertexAttribArray(texturedProgram.aColor);
-  gl.vertexAttribPointer(texturedProgram.aColor, 3, gl.FLOAT, false, 0, 0);
+  gl.enableVertexAttribArray(program.aColor);
+  gl.vertexAttribPointer(program.aColor, 3, gl.FLOAT, false, 0, 0);
 
   // uniform values
-  gl.uniform3fv(texturedProgram.uTheta, new Float32Array(angles));
-  gl.uniform3fv(texturedProgram.uLightDir, new Float32Array(lightDirection));
+  gl.uniform3fv(program.uTheta, new Float32Array(angles));
+  gl.uniform3fv(program.uLightDir, new Float32Array(lightDirection));
 
   // Setting up the IBO
   if (myIndexBuffer == null) myIndexBuffer = gl.createBuffer();

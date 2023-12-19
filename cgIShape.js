@@ -15,68 +15,89 @@ function makeCube(subdivisions, color) {
     for (let i = 0; i < subdivisions; i++) {
         for (let j = 0; j < subdivisions; j++) {
             // Define the vertices of each subdivision
-            let a0 = -0.5 + i * step;
-            let b0 = 0.5 - j * step;
-            let a1 = -0.5 + (i + 1) * step;
-            let b1 = 0.5 - j * step;
-            let a2 = -0.5 + i * step;
-            let b2 = 0.5 - (j + 1) * step;
-            let a3 = -0.5 + (i + 1) * step;
-            let b3 = 0.5 - (j + 1) * step;
+            let a0 = -0.5 + i * step;       // min X
+            let b0 = 0.5 - j * step;        // max Y
+            let a1 = -0.5 + (i + 1) * step; // max X
+            let b1 = 0.5 - j * step;        // max Y
+            let a2 = -0.5 + i * step;       // min X
+            let b2 = 0.5 - (j + 1) * step;  // min Y
+            let a3 = -0.5 + (i + 1) * step; // max X
+            let b3 = 0.5 - (j + 1) * step;  // min Y
 
             // Front face
             addTriangle(a0, b0, 0.5, a2, b2, 0.5, a1, b1, 0.5, color);
             // note that the uv's define the vertex point extents for the texturing
             // so min is 0.0 and the max extent is 1.0
             uvs.push(0.0);
-            uvs.push(0.0);
-
-            uvs.push(0.0);
-            uvs.push(1.0);
-
             uvs.push(1.0);
             uvs.push(0.0);
-            // uvs.push(0.0);
-            // uvs.push(1.0);
-            // uvs.push(0.0);
-            // uvs.push(0.0);
-            // uvs.push(1.0);
-            // uvs.push(1.0);
-
+            uvs.push(0.0);
+            uvs.push(1.0);
+            uvs.push(1.0);
             addTriangle(a2, b2, 0.5, a3, b3, 0.5, a1, b1, 0.5, color);
             uvs.push(0.0);
-            uvs.push(1.0);
-            uvs.push(1.0);
-            uvs.push(1.0);
+            uvs.push(0.0);
             uvs.push(1.0);
             uvs.push(0.0);
-            // uvs.push(0.0);
-            // uvs.push(0.0);
-            // uvs.push(1.0);
-            // uvs.push(0.0);
-            // uvs.push(1.0);
-            // uvs.push(1.0);
+            uvs.push(1.0);
+            uvs.push(1.0);
 
             // Back face 
             addTriangle(a0, b0, -0.5, a1, b1, -0.5, a2, b2, -0.5, color);
+            uvs.push(1.0);
+            uvs.push(1.0);
+            uvs.push(0.0);
+            uvs.push(1.0);
+            uvs.push(1.0);
+            uvs.push(0.0);
             addTriangle(a2, b2, -0.5, a1, b1, -0.5, a3, b3, -0.5, color);
+            uvs.push(1.0);
+            uvs.push(0.0);
+            uvs.push(0.0);
+            uvs.push(1.0);
+            uvs.push(0.0);
+            uvs.push(0.0);
 
             // Right face
             addTriangle(0.5, a0, b0, 0.5, a2, b2, 0.5, a1, b1, color);
+            uvs.push(0.0);
+            uvs.push(0.0);
+            uvs.push(1.0);
+            uvs.push(0.0);
+            uvs.push(0.0);
+            uvs.push(1.0);
             addTriangle(0.5, a2, b2, 0.5, a3, b3, 0.5, a1, b1, color);
+            uvs.push(1.0);
+            uvs.push(0.0);
+            uvs.push(1.0);
+            uvs.push(1.0);
+            uvs.push(0.0);
+            uvs.push(1.0);
 
             // Left face 
             addTriangle(-0.5, a0, b0, -0.5, a1, b1, -0.5, a2, b2, color);
+            uvs.push(1.0);
+            uvs.push(0.0);
+            uvs.push(1.0);
+            uvs.push(1.0);
+            uvs.push(0.0);
+            uvs.push(0.0);
             addTriangle(-0.5, a2, b2, -0.5, a1, b1, -0.5, a3, b3, color);
+            uvs.push(0.0);
+            uvs.push(0.0);
+            uvs.push(1.0);
+            uvs.push(1.0);
+            uvs.push(0.0);
+            uvs.push(1.0);
 
             // Top face
             addTriangle(a0, 0.5, b0, a1, 0.5, b1, a2, 0.5, b2, color);
             uvs.push(0.0);
-            uvs.push(1.0);
-            uvs.push(0.0);
             uvs.push(0.0);
             uvs.push(1.0);
             uvs.push(0.0);
+            uvs.push(0.0);
+            uvs.push(1.0);
             addTriangle(a2, 0.5, b2, a1, 0.5, b1, a3, 0.5, b3, color);
             uvs.push(0.0);
             uvs.push(1.0);
@@ -87,7 +108,19 @@ function makeCube(subdivisions, color) {
             
             // // Bottom face 
             addTriangle(a0, -0.5, b0, a2, -0.5, b2, a1, -0.5, b1, color);
+            uvs.push(0.0);
+            uvs.push(1.0);
+            uvs.push(0.0);
+            uvs.push(0.0);
+            uvs.push(1.0);
+            uvs.push(1.0);
             addTriangle(a2, -0.5, b2, a3, -0.5, b3, a1, -0.5, b1, color);
+            uvs.push(0.0);
+            uvs.push(0.0);
+            uvs.push(1.0);
+            uvs.push(0.0);
+            uvs.push(1.0);
+            uvs.push(1.0);
         }
 
 
@@ -282,9 +315,6 @@ function makeStar(numPoints, color) {
         addTriangle(centerX, centerY, outZ, starPointX, starPointY, centerZ, rightCornerX, rightCornerY, centerZ, color);
         // back left half of point
         addTriangle(centerX, centerY, outZ, leftCornerX, leftCornerY, centerZ, starPointX, starPointY, centerZ, color);
-
-
-
     }
 }
 

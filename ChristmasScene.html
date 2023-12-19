@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>CSCI-510: Tessellation</title>
+    <title>CSCI-510: Final Project</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.4.0/gl-matrix.js"></script>
 
     <!-- vertex Shader -->
@@ -70,6 +70,42 @@
     </script>
 
     <!-- fragment Shader -->
+    <script id="fragment-shader-Textured" type="x-shader/x-fragment">
+        #version 300 es
+        precision mediump float;
+         
+        
+        uniform sampler2D uSampler;
+
+        in vec3 vbc;
+        in vec4 vNormal;
+        in vec3 vLightDirection;
+        in vec3 vColor;
+        in vec2 vTextureCoords;
+
+        // Color that is the result of this shader
+        out vec4 fragColor;
+
+        void main(void) {
+
+            // Normal test
+            //fragColor = vec4(vNormal, 1.0);
+            
+           // Lighting
+           // Calculate the dot product between the normal and light direction
+            float diffuseFactor = max(dot(normalize(vNormal.xyz), normalize(vLightDirection)), 0.0);
+    
+
+           fragColor = texture(uSampler, vTextureCoords);
+
+           // Set the color based on the dot product
+           fragColor = vec4(fragColor.x * diffuseFactor, fragColor.y * diffuseFactor, fragColor.z * diffuseFactor, 1.0);
+
+        }
+
+     </script>
+
+     <!-- fragment Shader -->
     <script id="fragment-shader" type="x-shader/x-fragment">
         #version 300 es
         precision mediump float;
@@ -95,13 +131,12 @@
            // Calculate the dot product between the normal and light direction
             float diffuseFactor = max(dot(normalize(vNormal.xyz), normalize(vLightDirection)), 0.0);
        
-           // Set the color based on the dot product
-           fragColor = vec4(vColor.x * diffuseFactor, vColor.y * diffuseFactor, vColor.z * diffuseFactor, 1.0);
-
-           //fragColor = texture(uSampler, vTextureCoords);
+            // Set the color based on the dot product
+            fragColor = vec4(vColor.x * diffuseFactor, vColor.y * diffuseFactor, vColor.z * diffuseFactor, 1.0);
         }
 
      </script>
+
 
     <!-- include the shape creation functions -->
     <script type="text/javascript" src="./cgIShape.js"></script>
@@ -234,7 +269,8 @@
 </head>
 
 <body>
-    <h1>CSCI-510: Tessellation</h1>
+    <h1>CSCI-510: Final Project - Christmas Scene</h1>
+    <h2>By Evelyn Zou, Runi Jiang</h2>
     <table>
         <tr>
             <td><canvas id="webgl-canvas" width="800" height="500">

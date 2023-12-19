@@ -1,4 +1,4 @@
-let moveSpeed = .1;
+let moveSpeed = .3;
 let x = 0;
 let y = 1;
 let z = 2;
@@ -76,7 +76,7 @@ function updateCamera() {
     const viewMatrix = mat4.create();
     mat4.lookAt(viewMatrix, eye, center, up);
 
-    const viewMatrixLocation = gl.getUniformLocation(program, 'uViewMatrix');
+    const viewMatrixLocation = gl.getUniformLocation(texturedProgram, 'uViewMatrix');
     gl.uniformMatrix4fv(viewMatrixLocation, false, viewMatrix);
 
     updateDisplay = true;
