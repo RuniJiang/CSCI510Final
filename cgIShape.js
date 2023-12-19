@@ -5,10 +5,12 @@
 // number of subdivisions along each cube face as given by the parameter
 //subdivisions
 //
-function makeCube(subdivisions, color) {
+function makeCube(color) {
 
     // fill in your code here.
     // delete the code below first.
+
+    let subdivisions = 1;
 
     let step = 1 / subdivisions;
 
