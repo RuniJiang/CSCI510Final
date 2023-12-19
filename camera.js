@@ -1,4 +1,4 @@
-let moveSpeed = .1;
+let moveSpeed = .3;
 let x = 0;
 let y = 1;
 let z = 2;

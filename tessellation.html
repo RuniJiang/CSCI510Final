@@ -70,7 +70,7 @@
     </script>
 
     <!-- fragment Shader -->
-    <script id="fragment-shader" type="x-shader/x-fragment">
+    <script id="fragment-shader-Textured" type="x-shader/x-fragment">
         #version 300 es
         precision mediump float;
          
@@ -102,6 +102,43 @@
         }
 
      </script>
+
+     <!-- fragment Shader -->
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        #version 300 es
+        precision mediump float;
+         
+        
+        uniform sampler2D uSampler;
+
+        in vec3 vbc;
+        in vec4 vNormal;
+        in vec3 vLightDirection;
+        in vec3 vColor;
+        in vec2 vTextureCoords;
+
+        // Color that is the result of this shader
+        out vec4 fragColor;
+
+        void main(void) {
+
+            // Normal test
+            //fragColor = vec4(vNormal, 1.0);
+            
+           // Lighting
+           // Calculate the dot product between the normal and light direction
+            float diffuseFactor = max(dot(normalize(vNormal.xyz), normalize(vLightDirection)), 0.0);
+       
+            fragColor = texture(uSampler, vTextureCoords);
+
+           // Set the color based on the dot product
+           fragColor = vec4(fragColor.x * diffuseFactor, fragColor.y * diffuseFactor, fragColor.z * diffuseFactor, 1.0);
+
+        
+        }
+
+     </script>
+
 
     <!-- include the shape creation functions -->
     <script type="text/javascript" src="./cgIShape.js"></script>
