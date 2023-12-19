@@ -5,10 +5,12 @@
 // number of subdivisions along each cube face as given by the parameter
 //subdivisions
 //
-function makeCube(subdivisions, color) {
+function makeCube(color) {
 
     // fill in your code here.
     // delete the code below first.
+
+    let subdivisions = 1;
 
     let step = 1 / subdivisions;
 
@@ -105,7 +107,7 @@ function makeCube(subdivisions, color) {
             uvs.push(0.0);
             uvs.push(1.0);
             uvs.push(1.0);
-            
+
             // // Bottom face 
             addTriangle(a0, -0.5, b0, a2, -0.5, b2, a1, -0.5, b1, color);
             uvs.push(0.0);
