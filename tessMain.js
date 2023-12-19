@@ -196,7 +196,26 @@ function draw() {
   gl.uniform1i(program.uSampler, 0);
 
   // Draw to the scene using triangle primitives
-  gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
+  gl.drawElements(gl.TRIANGLES, textureIndexStart, gl.UNSIGNED_SHORT, 0);
+
+  for (let i = 0; i < 6; i++) {
+    //bind the texture
+  gl.activeTexture(gl.TEXTURE0 + i);  // Use texture unit 0 + i
+  gl.bindTexture(gl.TEXTURE_2D, textures[i % 3 + 1]);
+  gl.uniform1i(program.uSampler, i);  // Use i as the texture unit
+
+    // Draw to the scene using triangle primitives
+    gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, textureIndexStart + i*36);
+  }
+
+  gl.activeTexture(gl.TEXTURE0);
+  gl.bindTexture(gl.TEXTURE_2D, textures[1]);
+  gl.uniform1i(program.uSampler, 0);
+
+  // Draw to the scene using triangle primitives
+  gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, textureIndexStart );
+  
+  
 
   // Clean
   gl.bindVertexArray(null);
@@ -586,7 +605,7 @@ function createScene() {
 
 
   //presents
-  textureIndexStart = points.length;
+  textureIndexStart = indices.length;
   makeCube();
   previousIndex = pointsLastIndex;
   pointsLastIndex = points.length;
