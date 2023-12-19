@@ -124,7 +124,7 @@ function initTexturedProgram(){
  // you can load them into an array and use promises if you want as well
  // just look up using promises
 (async () => { 
-    image.src = 'giftGreen.jpg'; // note: file in same dir as other files for program
+    image.src = 'Textures/giftGreen.jpg'; // note: file in same dir as other files for program
     await image.decode();
     // img is ready to use: this console write is left here to help
     // others with potential debugging when changing this function
