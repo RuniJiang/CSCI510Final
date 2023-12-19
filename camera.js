@@ -76,7 +76,7 @@ function updateCamera() {
     const viewMatrix = mat4.create();
     mat4.lookAt(viewMatrix, eye, center, up);
 
-    const viewMatrixLocation = gl.getUniformLocation(texturedProgram, 'uViewMatrix');
+    const viewMatrixLocation = gl.getUniformLocation(program, 'uViewMatrix');
     gl.uniformMatrix4fv(viewMatrixLocation, false, viewMatrix);
 
     updateDisplay = true;
