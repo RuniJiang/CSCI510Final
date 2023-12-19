@@ -48,8 +48,8 @@ var curShape = STAR;
 
 // Camera variables
 // Set up the view matrix (position the camera)
-let eye = [0.0, 0, 7.0];  // Camera position (adjust as needed)
-let center = [0.0, 0.0, 0.0];  // Point the camera is looking at
+let eye = [0.0, -0.3, 7.0];  // Camera position (adjust as needed)
+let center = [0.0, -0.3, 0.0];  // Point the camera is looking at
 let up = [0.0, 1.0, 0.0];  // Up direction of the camera
 
 // Given an id, extract the content's of a shader script
@@ -575,8 +575,36 @@ function createScene() {
   previousIndex = pointsLastIndex;
   pointsLastIndex = points.length;
   scalePoints(previousIndex, pointsLastIndex, .16, .16, .16);
-  rotatePointsY(previousIndex, pointsLastIndex, radians(28));
+  rotatePointsY(previousIndex, pointsLastIndex, radians(20));
   translatePoints(previousIndex, pointsLastIndex, 1.6, -1.92, 2);
+
+  makeCube();
+  previousIndex = pointsLastIndex;
+  pointsLastIndex = points.length;
+  scalePoints(previousIndex, pointsLastIndex, .35, .38, .35);
+  rotatePointsY(previousIndex, pointsLastIndex, radians(-10));
+  translatePoints(previousIndex, pointsLastIndex, .8, -1.8, 1.6);
+
+  makeCube();
+  previousIndex = pointsLastIndex;
+  pointsLastIndex = points.length;
+  scalePoints(previousIndex, pointsLastIndex, .28, .28, .28);
+  rotatePointsY(previousIndex, pointsLastIndex, radians(20));
+  translatePoints(previousIndex, pointsLastIndex, .43, -1.85, 1.45);
+
+  makeCube();
+  previousIndex = pointsLastIndex;
+  pointsLastIndex = points.length;
+  scalePoints(previousIndex, pointsLastIndex, .14, .14, .14);
+  rotatePointsY(previousIndex, pointsLastIndex, radians(49));
+  translatePoints(previousIndex, pointsLastIndex, .48, -1.92, 1.95);
+
+  makeCube();
+  previousIndex = pointsLastIndex;
+  pointsLastIndex = points.length;
+  scalePoints(previousIndex, pointsLastIndex, .3, .3, .4);
+  rotatePointsY(previousIndex, pointsLastIndex, radians(-50));
+  translatePoints(previousIndex, pointsLastIndex, -1.8, -1.9, 2.3);
 
 
   rotatePointsY(baseIndexEnd, pointsLastIndex, radians(-5));

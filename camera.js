@@ -4,8 +4,8 @@ let y = 1;
 let z = 2;
 
 function resetCamera() {
-    eye = [0.0, 0, 7.0];  // Camera position (adjust as needed)
-    center = [0.0, 0.0, 0.0];  // Point the camera is looking at
+    eye = [0.0, -0.3, 7.0];  // Camera position (adjust as needed)
+    center = [0.0, -0.3, 0.0];  // Point the camera is looking at
     up = [0.0, 1.0, 0.0];  // Up direction of the camera
     updateCamera();
 }
