@@ -5,7 +5,6 @@
 let gl,
   program,
   points,
-  texture,
   uvs,
   pointsLastIndex,
   previousIndex,
@@ -16,6 +15,12 @@ let gl,
   textureIndexStart,
   projectionMatrix,
   viewMatrix;
+
+  let
+  textures,
+  textureImages;
+
+
 
 // VAO stuff
 var myVAO = null;
@@ -116,24 +121,42 @@ function initProgram() {
   program.uSampler = gl.getUniformLocation(program, 'uSampler');
 
   // set up texture and image load and value
-  texture = gl.createTexture();
-  const image = new Image();
+  textures = [];
+  textureImages = [];
+  for (let i = 0; i < 4; i++) {
+    textures.push(gl.createTexture());
+    textureImages.push(new Image());
+  }
+  let image = textureImages[0];
 
   // this approach can be used to load multiple files - just note it's async and needs
   // to call whatever happens after the files get loaded
   // you can load them into an array and use promises if you want as well
   // just look up using promises
   (async () => {
-    image.src = 'Textures/giftGreen.jpg'; // note: file in same dir as other files for program
-    await image.decode();
+    textureImages[0].src = 'Textures/snowground.jpg'; // note: file in same dir as other files for program
+    await textureImages[0].decode();
+    
+
+    textureImages[1].src = 'Textures/gift.jpg'; // note: file in same dir as other files for program
+    await textureImages[1].decode();
+
+    textureImages[2].src = 'Textures/giftDeer.jpg'; // note: file in same dir as other files for program
+    await textureImages[2].decode();
+
+    textureImages[3].src = 'Textures/giftGreen.jpg'; // note: file in same dir as other files for program
+    await textureImages[3].decode();
+    
     // img is ready to use: this console write is left here to help
     // others with potential debugging when changing this function
     console.log(`width: ${image.width}, height: ${image.height}`);
-    gl.bindTexture(gl.TEXTURE_2D, texture);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-    gl.bindTexture(gl.TEXTURE_2D, null);
+    for (let i = 0; i < 4; i++) {
+      gl.bindTexture(gl.TEXTURE_2D, textures[i]);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureImages[i]);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+      gl.bindTexture(gl.TEXTURE_2D, null);
+    }
     // // create and bind your current object
     // createNewShape();
     // // do a draw
@@ -169,7 +192,7 @@ function draw() {
 
   //bind the texture
   gl.activeTexture(gl.TEXTURE0);
-  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.bindTexture(gl.TEXTURE_2D, textures[0]);
   gl.uniform1i(program.uSampler, 0);
 
   // Draw to the scene using triangle primitives
