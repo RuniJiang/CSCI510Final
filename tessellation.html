@@ -94,11 +94,13 @@
            // Lighting
            // Calculate the dot product between the normal and light direction
             float diffuseFactor = max(dot(normalize(vNormal.xyz), normalize(vLightDirection)), 0.0);
-       
-           // Set the color based on the dot product
-           fragColor = vec4(vColor.x * diffuseFactor, vColor.y * diffuseFactor, vColor.z * diffuseFactor, 1.0);
+    
 
            fragColor = texture(uSampler, vTextureCoords);
+
+           // Set the color based on the dot product
+           fragColor = vec4(fragColor.x * diffuseFactor, fragColor.y * diffuseFactor, fragColor.z * diffuseFactor, 1.0);
+
         }
 
      </script>
@@ -129,12 +131,8 @@
            // Calculate the dot product between the normal and light direction
             float diffuseFactor = max(dot(normalize(vNormal.xyz), normalize(vLightDirection)), 0.0);
        
-            fragColor = texture(uSampler, vTextureCoords);
-
-           // Set the color based on the dot product
-           fragColor = vec4(fragColor.x * diffuseFactor, fragColor.y * diffuseFactor, fragColor.z * diffuseFactor, 1.0);
-
-        
+            // Set the color based on the dot product
+            fragColor = vec4(vColor.x * diffuseFactor, vColor.y * diffuseFactor, vColor.z * diffuseFactor, 1.0);
         }
 
      </script>

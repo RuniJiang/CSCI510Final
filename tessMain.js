@@ -4,6 +4,7 @@
 // across the application
 let gl,
   program,
+  texturedProgram,
   points,
   texture,
   uvs,
@@ -82,6 +83,63 @@ function getShader(id) {
   return shader;
 }
 
+function initTexturedProgram(){
+  const vertexShader = getShader('vertex-shader');
+  const fragmentShader = getShader('fragment-shader-Textured');
+
+  // Create a program
+  texturedProgram = gl.createProgram();
+  // Attach the shaders to this program
+  gl.attachShader(texturedProgram, vertexShader);
+  gl.attachShader(texturedProgram, fragmentShader);
+  gl.linkProgram(texturedProgram);
+
+  if (!gl.getProgramParameter(texturedProgram, gl.LINK_STATUS)) {
+    console.error('Could not initialize shaders');
+  }
+
+  // Use this program instance
+  gl.useProgram(texturedProgram);
+  // We attach the location of these shader values to the program instance
+  // for easy access later in the code
+  texturedProgram.aVertexPosition = gl.getAttribLocation(texturedProgram, 'aVertexPosition');
+  texturedProgram.aBary = gl.getAttribLocation(texturedProgram, 'bary');
+  texturedProgram.aNormal = gl.getAttribLocation(texturedProgram, 'aNormal');
+  texturedProgram.aColor = gl.getAttribLocation(texturedProgram, 'aColor');
+  texturedProgram.uTheta = gl.getUniformLocation(texturedProgram, 'theta');
+  texturedProgram.uLightDir = gl.getUniformLocation(texturedProgram, 'uLightDirection');
+   // set up texture location info
+   texturedProgram.aVertexTextureCoords = gl.getAttribLocation(texturedProgram, 'aVertexTextureCoords');
+   texturedProgram.uSampler = gl.getUniformLocation(texturedProgram, 'uSampler');
+  
+
+   // set up texture and image load and value
+   texture = gl.createTexture();
+   const image = new Image();
+
+ // this approach can be used to load multiple files - just note it's async and needs
+ // to call whatever happens after the files get loaded
+ // you can load them into an array and use promises if you want as well
+ // just look up using promises
+(async () => { 
+    image.src = 'webgl.png'; // note: file in same dir as other files for program
+    await image.decode();
+    // img is ready to use: this console write is left here to help
+    // others with potential debugging when changing this function
+    console.log(`width: ${image.width}, height: ${image.height}`);
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.bindTexture(gl.TEXTURE_2D, null);
+    // // create and bind your current object
+    // createNewShape();
+    // // do a draw
+    // draw();
+   })();
+
+}
+
 // Create a program with the appropriate vertex and fragment shaders
 function initProgram() {
   const vertexShader = getShader('vertex-shader');
@@ -111,33 +169,6 @@ function initProgram() {
    // set up texture location info
    program.aVertexTextureCoords = gl.getAttribLocation(program, 'aVertexTextureCoords');
    program.uSampler = gl.getUniformLocation(program, 'uSampler');
-  
-
-   // set up texture and image load and value
-   texture = gl.createTexture();
-   const image = new Image();
-
- // this approach can be used to load multiple files - just note it's async and needs
- // to call whatever happens after the files get loaded
- // you can load them into an array and use promises if you want as well
- // just look up using promises
-(async () => { 
-    image.src = 'webgl.png'; // note: file in same dir as other files for program
-    await image.decode();
-    // img is ready to use: this console write is left here to help
-    // others with potential debugging when changing this function
-    console.log(`width: ${image.width}, height: ${image.height}`);
-    gl.bindTexture(gl.TEXTURE_2D, texture);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-    gl.bindTexture(gl.TEXTURE_2D, null);
-    // // create and bind your current object
-    // createNewShape();
-    // // do a draw
-    // draw();
-   })();
-
   
 }
 
@@ -228,6 +259,7 @@ function init() {
 
   // Read, compile, and link your shaders
   initProgram();
+  //initTexturedProgram();
 
   // Set up the projection matrix (example using perspective projection)
   const fov = 45 * Math.PI / 180;
