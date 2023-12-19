@@ -108,20 +108,20 @@ function initProgram() {
   program.aColor = gl.getAttribLocation(program, 'aColor');
   program.uTheta = gl.getUniformLocation(program, 'theta');
   program.uLightDir = gl.getUniformLocation(program, 'uLightDirection');
-   // set up texture location info
-   program.aVertexTextureCoords = gl.getAttribLocation(program, 'aVertexTextureCoords');
-   program.uSampler = gl.getUniformLocation(program, 'uSampler');
-  
+  // set up texture location info
+  program.aVertexTextureCoords = gl.getAttribLocation(program, 'aVertexTextureCoords');
+  program.uSampler = gl.getUniformLocation(program, 'uSampler');
 
-   // set up texture and image load and value
-   texture = gl.createTexture();
-   const image = new Image();
 
- // this approach can be used to load multiple files - just note it's async and needs
- // to call whatever happens after the files get loaded
- // you can load them into an array and use promises if you want as well
- // just look up using promises
-(async () => { 
+  // set up texture and image load and value
+  texture = gl.createTexture();
+  const image = new Image();
+
+  // this approach can be used to load multiple files - just note it's async and needs
+  // to call whatever happens after the files get loaded
+  // you can load them into an array and use promises if you want as well
+  // just look up using promises
+  (async () => {
     image.src = 'webgl.png'; // note: file in same dir as other files for program
     await image.decode();
     // img is ready to use: this console write is left here to help
@@ -136,9 +136,9 @@ function initProgram() {
     // createNewShape();
     // // do a draw
     // draw();
-   })();
+  })();
 
-  
+
 }
 
 
@@ -258,18 +258,27 @@ function init() {
 
 
 function makeTree(green) {
-  green = green || [176 / 255, 222 / 235, 162 / 255];
+
+  //147, 235, 96
+  //176 / 255, 222 / 235, 162 / 255 old green
+  green = green || [168 / 255, 224 / 255, 135 / 255];
   let brown = [99 / 255, 66 / 255, 5 / 255];
   makeCone(50, 1, 0.5, 1, green);
   let tempPrev = pointsLastIndex;
   let tempLast = points.length;
   translatePoints(tempPrev, tempLast, 0, .4, 0);
 
+  green[0] += -.13;
+  green[1] += -.13;
+  green[2] += -.13;
   makeCone(50, 1, 0.75, 1.3, green);
   tempPrev = tempLast;
   tempLast = points.length;
   translatePoints(tempPrev, tempLast, 0, -.2, 0);
 
+  green[0] += -.13;
+  green[1] += -.13;
+  green[2] += -.13;
   makeCone(50, 1, .95, 1.5, green);
   tempPrev = tempLast;
   tempLast = points.length;
@@ -509,11 +518,13 @@ function createScene() {
 
   let baseIndexEnd = pointsLastIndex;
 
-  makeTree();
+  //207, 235, 190
+  //189 / 255, 235 / 255, 162 / 255
+  makeTree([193 / 255, 237 / 255, 166 / 255]);
   scalePoints(previousIndex, pointsLastIndex, .95, .95, .95);
   translatePoints(previousIndex, pointsLastIndex, -1.2, -.1, 1.8);
 
-  makeTreeOrnaments([207 / 255, 6 / 255, 6 / 255]);
+  makeTreeOrnaments([219 / 255, 68 / 255, 68 / 255]);
   rotatePointsY(previousIndex, pointsLastIndex, radians(0));
   scalePoints(previousIndex, pointsLastIndex, .95, .95, .95);
   translatePoints(previousIndex, pointsLastIndex, -1.2, -.1, 1.8);
@@ -612,20 +623,20 @@ function createScene() {
   gl.enableVertexAttribArray(program.aBary);
   gl.vertexAttribPointer(program.aBary, 3, gl.FLOAT, false, 0, 0);
 
-    // create and bind vertex buffer
-    if (myVertexBuffer == null) myVertexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, myVertexBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(points), gl.STATIC_DRAW);
-    gl.enableVertexAttribArray(program.aVertexPosition);
-    gl.vertexAttribPointer(program.aVertexPosition, 4, gl.FLOAT, false, 0, 0);
-    
-    // create and bind uv buffer
-    if (myUVBuffer == null) myUVBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, myUVBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvs), gl.STATIC_DRAW);
-    gl.enableVertexAttribArray(program.aVertexTextureCoords);
-    // note that texture uv's are 2d, which is why there's a 2 below
-    gl.vertexAttribPointer(program.aVertexTextureCoords, 2, gl.FLOAT, false, 0, 0);
+  // create and bind vertex buffer
+  if (myVertexBuffer == null) myVertexBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, myVertexBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(points), gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(program.aVertexPosition);
+  gl.vertexAttribPointer(program.aVertexPosition, 4, gl.FLOAT, false, 0, 0);
+
+  // create and bind uv buffer
+  if (myUVBuffer == null) myUVBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, myUVBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvs), gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(program.aVertexTextureCoords);
+  // note that texture uv's are 2d, which is why there's a 2 below
+  gl.vertexAttribPointer(program.aVertexTextureCoords, 2, gl.FLOAT, false, 0, 0);
 
 
   // Bind normal buffer
