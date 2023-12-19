@@ -141,44 +141,6 @@
             else if (key == 'Z')
                 angles[2] += angleInc;
 
-        // shape selection
-        else if (key == '1' || key == 'c') {
-            curShape = CUBE;
-        }
-        else if (key == '2' || key == 'C') {
-            curShape = CYLINDER;
-        }
-        else if (key == '3' || key == 'n') {
-            curShape = CONE;
-        }
-        else if (key == '4') {
-            curShape = SPHERE
-        }
-        else if (key == '5' || key == 't') {
-            curShape = STAR
-        }
-        else if (key == '6') {
-            curShape = ARCH
-        }
-
-            // tessellation control
-            else if (key == '+') {
-                division1 = division1 + 1;
-            }
-            else if (key == '=') {
-                division2 = division2 + 1;
-            }
-            else if (key == '-') {
-                if (division1 > 1) {
-                    division1 = division1 - 1;
-                }
-            }
-            else if (key == '_') {
-                if (division2 > 1) {
-                    division2 = division2 - 1;
-                }
-            }
-
         // reset
         else if (key == 'r' || key=='R') {
             angles[0] = anglesReset[0];
@@ -187,19 +149,19 @@
             resetCamera();
         }
 
-        else if ( key == 'w') {
+        else if ( key == 'w' || key == 'W') {
             moveForward();
         }
 
-        else if (key == 's') {
+        else if (key == 's' || key == 'A') {
             moveBackwards();
         }
 
-        else if (key == 'd') {
+        else if (key == 'd' || key == 'S') {
             moveRight();
         }
 
-        else if (key == 'a') {
+        else if (key == 'a' || key == 'D') {
             moveLeft();
         }
 
@@ -262,36 +224,24 @@
                             <td>Rotate the current shape backward about the x, y, or z axis</td>
                         </tr>
                         <tr>
-                            <td>1, c</td>
-                            <td>Select the cube as the current shape (using current tessellation settings)</td>
+                            <td>ArrowRight, Arrow Left</td>
+                            <td>Rotate the current shape forward and backward about the y axis</td>
                         </tr>
                         <tr>
-                            <td>2, C</td>
-                            <td>Select the cylinder as the current shape (using current tessellation settings)</td>
+                            <td>Arrow Up, Arrow Down</td>
+                            <td>Move the camera to angle up or down</td>
                         </tr>
                         <tr>
-                            <td>3, n</td>
-                            <td>Select the cone as the current shape (using current tessellation settings)</td>
+                            <td>w, a, s, d</td>
+                            <td>Move the camera forward, left, backwards, and right</td>
                         </tr>
                         <tr>
-                            <td>4, s</td>
-                            <td>Select the sphere as the current shape (using current tessellation settings)</td>
+                            <td>Ctrl</td>
+                            <td>Move the camera up</td>
                         </tr>
                         <tr>
-                            <td>5, t</td>
-                            <td>Select the STAR as the current shape (using current tessellation settings)</td>
-                        </tr>
-                        <tr>
-                            <td>6, a</td>
-                            <td>Select the Arch as the current shape (using current tessellation settings)</td>
-                        </tr>
-                        <tr>
-                            <td>+, -</td>
-                            <td>Increment/decrement the primary subdivision of the current shape by 1</td>
-                        </tr>
-                        <tr>
-                            <td>=, _</td>
-                            <td>Increment/decrement the secondary subdivision of the current shape by 1</td>
+                            <td>Shift</td>
+                            <td>Move the camera down</td>
                         </tr>
                         <tr>
                             <td>r, R</td>

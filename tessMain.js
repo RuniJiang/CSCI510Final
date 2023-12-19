@@ -259,18 +259,27 @@ function init() {
 
 
 function makeTree(green) {
-  green = green || [176 / 255, 222 / 235, 162 / 255];
+
+  //147, 235, 96
+  //176 / 255, 222 / 235, 162 / 255 old green
+  green = green || [168 / 255, 224 / 255, 135 / 255];
   let brown = [99 / 255, 66 / 255, 5 / 255];
   makeCone(50, 1, 0.5, 1, green);
   let tempPrev = pointsLastIndex;
   let tempLast = points.length;
   translatePoints(tempPrev, tempLast, 0, .4, 0);
 
+  green[0] += -.13;
+  green[1] += -.13;
+  green[2] += -.13;
   makeCone(50, 1, 0.75, 1.3, green);
   tempPrev = tempLast;
   tempLast = points.length;
   translatePoints(tempPrev, tempLast, 0, -.2, 0);
 
+  green[0] += -.13;
+  green[1] += -.13;
+  green[2] += -.13;
   makeCone(50, 1, .95, 1.5, green);
   tempPrev = tempLast;
   tempLast = points.length;
@@ -510,11 +519,13 @@ function createScene() {
 
   let baseIndexEnd = pointsLastIndex;
 
-  makeTree();
+  //207, 235, 190
+  //189 / 255, 235 / 255, 162 / 255
+  makeTree([193 / 255, 237 / 255, 166 / 255]);
   scalePoints(previousIndex, pointsLastIndex, .95, .95, .95);
   translatePoints(previousIndex, pointsLastIndex, -1.2, -.1, 1.8);
 
-  makeTreeOrnaments([207 / 255, 6 / 255, 6 / 255]);
+  makeTreeOrnaments([219 / 255, 68 / 255, 68 / 255]);
   rotatePointsY(previousIndex, pointsLastIndex, radians(0));
   scalePoints(previousIndex, pointsLastIndex, .95, .95, .95);
   translatePoints(previousIndex, pointsLastIndex, -1.2, -.1, 1.8);
